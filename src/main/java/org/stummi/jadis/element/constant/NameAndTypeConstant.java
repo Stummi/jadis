@@ -2,16 +2,18 @@ package org.stummi.jadis.element.constant;
 
 import lombok.Value;
 
+import org.stummi.jadis.element.ConstantPool;
+
 @Value
 public class NameAndTypeConstant implements Constant {
-	private final short nameId;
-	private final short typeId;
+	private final short nameRef;
+	private final short typeRef;
 
 	@Override
-	public String toResolvedString(Constant[] constants) {
-		StringConstant name = (StringConstant) constants[nameId];
-		StringConstant type = (StringConstant) constants[typeId];
-		return String.format("NameAndType: %s %s [%d %d]", name.getValue(),
-				type.getValue(), nameId, typeId);
+	public String toResolvedString(ConstantPool constants) {
+		String name = constants.getStringConstantValue(nameRef);
+		String type = constants.getStringConstantValue(typeRef);
+		return String.format("NameAndType: %s %s [%d %d]", name, type, nameRef,
+				typeRef);
 	}
 }

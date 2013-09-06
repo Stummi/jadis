@@ -12,7 +12,7 @@ public class ExceptionsAttributeDumper extends
 		ConstantPool cp = classFile.getConstantPool();
 		for (Integer i : attribute.getExceptionRefs()) {
 			Constant c = cp.getConstant(i);
-			printfln("[%s] %s", i, c.toResolvedString(cp.getConstants()));
+			printfln("[%s] %s", i, c.toResolvedString(cp));
 		}
 
 	}

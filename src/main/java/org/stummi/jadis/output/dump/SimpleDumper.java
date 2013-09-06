@@ -43,8 +43,7 @@ public class SimpleDumper {
 		ClassVersion version = cf.getVersion();
 		Constant c = cf.getConstantPool().getConstant(cf.getThisClassId());
 		out.println("Jadis Class File Dump");
-		out.printf("For %s\n",
-				c.toResolvedString(cf.getConstantPool().getConstants()));
+		out.printf("For %s\n", c.toResolvedString(cf.getConstantPool()));
 		out.printf("Version: %d.%d\n", version.getMajor(), version.getMinor());
 		out.printf("Date: %s\n", new Date());
 	}
@@ -58,7 +57,7 @@ public class SimpleDumper {
 			if (c == null) {
 				continue;
 			}
-			out.printf("%s: %s\n", idx, c.toResolvedString(constants));
+			out.printf("%s: %s\n", idx, c.toResolvedString(constantPool));
 		}
 	}
 
@@ -68,16 +67,15 @@ public class SimpleDumper {
 		List<AccessFlag> accessFlags = cf.getAccessFlags();
 		int thisClassId = cf.getThisClassId();
 		int superClassId = cf.getSuperClassId();
-		Constant[] constants = constantPool.getConstants();
 
 		out.printf("Accessflags: %s\n", accessFlags);
 		Constant thisClass = constantPool.getConstant(thisClassId);
 		Constant superClass = constantPool.getConstant(superClassId);
-		out.printf("this: %s\n", thisClass.toResolvedString(constants));
+		out.printf("this: %s\n", thisClass.toResolvedString(constantPool));
 		out.printf(
 				"super: %s\n",
 				(superClass == null ? "<NULL>" : superClass
-						.toResolvedString(constants)));
+						.toResolvedString(constantPool)));
 
 	}
 
@@ -87,7 +85,7 @@ public class SimpleDumper {
 		List<Short> interfaces = cf.getInterfaces();
 		for (Short s : interfaces) {
 			out.println(constantPool.getConstant(s).toResolvedString(
-					constantPool.getConstants()));
+					constantPool));
 		}
 	}
 

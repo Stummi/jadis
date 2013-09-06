@@ -17,10 +17,9 @@ public class AnnotationsAttributeDumper extends
 	protected void dumpAttribute(AnnotationsAttribute attribute) {
 
 		ConstantPool cp = classFile.getConstantPool();
-		Constant[] constants = cp.getConstants();
 		for (AnnotationsEntry av : attribute.getEntries()) {
 			int typeRef = av.getTypeRef();
-			printfln("%s", cp.getConstant(typeRef).toResolvedString(constants));
+			printfln("%s", cp.getConstant(typeRef).toResolvedString(cp));
 			for (AnnotationElement ae : av.getElementValues()) {
 				dumpAnnotationElement(ae);
 			}
@@ -42,7 +41,6 @@ public class AnnotationsAttributeDumper extends
 
 	private void dumpValue(AnnotationElementValue value) {
 		ConstantPool cp = classFile.getConstantPool();
-		Constant[] constants = cp.getConstants();
 		if (value instanceof ArrayAnnotationValue) {
 			printfln("[array]");
 			for (AnnotationElementValue aev : ((ArrayAnnotationValue) value)
@@ -52,19 +50,20 @@ public class AnnotationsAttributeDumper extends
 		} else if (value instanceof ReferenceAnnotationValue) {
 			ReferenceAnnotationValue rav = (ReferenceAnnotationValue) value;
 			Constant c = cp.getConstant(rav.getReference());
-			printfln("reference: %s", c.toResolvedString(constants));
+			printfln("reference: [%d] %s", rav.getReference(),
+					c.toResolvedString(cp));
 		} else if (value instanceof EnumConstAnnotationValue) {
 			EnumConstAnnotationValue ecav = (EnumConstAnnotationValue) value;
 			String typeName = cp.getStringConstantValue(ecav.getTypeNameRef());
 			String constName = cp
 					.getStringConstantValue(ecav.getConstNameRef());
 
-			printfln("%s -> %s", typeName, constName);
+			printfln("EnumConstant: [%d] %s -> [%d] %s", ecav.getTypeNameRef(),
+					typeName, ecav.getConstNameRef(), constName);
 		} else if (value instanceof AnnotationsEntry) {
 			AnnotationsEntry ae = (AnnotationsEntry) value;
 			printfln("Annotation: "
-					+ cp.getConstant(ae.getTypeRef()).toResolvedString(
-							constants));
+					+ cp.getConstant(ae.getTypeRef()).toResolvedString(cp));
 			for (AnnotationElement elem : ae.getElementValues())
 				dumpAnnotationElement(elem);
 		} else {

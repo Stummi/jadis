@@ -12,7 +12,7 @@ public class SimpleReferenceAttributeDumper extends
 		ConstantPool cp = classFile.getConstantPool();
 		int ref = attribute.getConstantRef();
 		Constant c = cp.getConstant(ref);
-		printfln("[%s] %s", ref, c.toResolvedString(cp.getConstants()));
+		printfln("[%s] %s", ref, c.toResolvedString(cp));
 	}
 
 }
