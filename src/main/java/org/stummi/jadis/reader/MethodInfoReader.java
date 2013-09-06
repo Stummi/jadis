@@ -4,10 +4,10 @@ import java.io.IOException;
 import java.util.List;
 
 import org.stummi.jadis.JadisInputStream;
-import org.stummi.jadis.element.AttributeInfo;
 import org.stummi.jadis.element.MethodInfo;
 import org.stummi.jadis.element.accessflags.AccessFlag;
 import org.stummi.jadis.element.accessflags.AccessFlagContext;
+import org.stummi.jadis.element.attribute.Attribute;
 
 public class MethodInfoReader implements ElementReader<MethodInfo> {
 	
@@ -17,8 +17,7 @@ public class MethodInfoReader implements ElementReader<MethodInfo> {
 				.readAccessFlags(AccessFlagContext.METHOD);
 		short nameIndex = jadis.readShort();
 		short descriptorIndex = jadis.readShort();
-		List<AttributeInfo> attributes = jadis
-				.readElementList(AttributeInfo.class);
+		List<Attribute> attributes = jadis.readElementList(Attribute.class);
 		return new MethodInfo(accessFlags, nameIndex, descriptorIndex, attributes);
 	}
 

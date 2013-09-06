@@ -1,11 +1,11 @@
 package org.stummi.jadis.output.dump.attribute;
 
-import org.stummi.jadis.element.attribute.Attribute;
+import org.stummi.jadis.element.attribute.UnknownAttribute;
 
-public class GenericAttributeDumper extends AbstractAttributeDumper<Attribute> {
+public class UnknownAttributeDumper extends AbstractAttributeDumper<UnknownAttribute> {
 
 	@Override
-	public void dumpAttribute(Attribute attribute) {
+	public void dumpAttribute(UnknownAttribute attribute) {
 		byte[] data = attribute.getAttributeData();
 		boolean firstLine = true;
 		int idx = 0;

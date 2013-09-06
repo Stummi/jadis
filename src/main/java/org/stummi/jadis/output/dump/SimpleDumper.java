@@ -6,7 +6,6 @@ import java.util.List;
 
 import lombok.RequiredArgsConstructor;
 
-import org.stummi.jadis.element.AttributeInfo;
 import org.stummi.jadis.element.ClassFile;
 import org.stummi.jadis.element.ClassVersion;
 import org.stummi.jadis.element.ConstantPool;
@@ -14,7 +13,6 @@ import org.stummi.jadis.element.FieldInfo;
 import org.stummi.jadis.element.MethodInfo;
 import org.stummi.jadis.element.accessflags.AccessFlag;
 import org.stummi.jadis.element.attribute.Attribute;
-import org.stummi.jadis.element.attribute.AttributeFactory;
 import org.stummi.jadis.element.constant.Constant;
 import org.stummi.jadis.element.constant.StringConstant;
 
@@ -100,7 +98,7 @@ public class SimpleDumper {
 			String name = getConstantPoolString(fi.getNameIndex());
 			String descriptor = getConstantPoolString(fi.getDescriptorIndex());
 			out.printf("%s %s %s\n", fi.getFlags(), name, descriptor);
-			dumpAttributeInfoList(fi.getAttributes(), 2);
+			dumpAttributeList(fi.getAttributes(), 2);
 		}
 	}
 
@@ -111,28 +109,21 @@ public class SimpleDumper {
 			String name = getConstantPoolString(mi.getNameIndex());
 			String descriptor = getConstantPoolString(mi.getDescriptorIndex());
 			out.printf("%s %s %s\n", mi.getFlags(), name, descriptor);
-			dumpAttributeInfoList(mi.getAttributes(), 2);
+			dumpAttributeList(mi.getAttributes(), 2);
 
 		}
 	}
 
 	public void dumpAttributes() {
 		printHead("ATTRIBUTES");
-		List<AttributeInfo> attributes = cf.getAttributes();
-		dumpAttributeInfoList(attributes, 1);
+		List<Attribute> attributes = cf.getAttributes();
+		dumpAttributeList(attributes, 1);
 	}
 
-	public void dumpAttributeInfoList(List<AttributeInfo> attributes, int indent) {
-		for (AttributeInfo ai : attributes) {
-			dumpAttributeInfo(ai, indent);
+	public void dumpAttributeList(List<Attribute> attributes, int indent) {
+		for (Attribute a : attributes) {
+			dumpAttribute(a, indent);
 		}
-	}
-
-	public void dumpAttributeInfo(AttributeInfo ai, int indent) {
-		String attributeName = getConstantPoolString(ai.getNameIndex());
-		Attribute a = AttributeFactory.createFromAttributeInfo(attributeName,
-				ai);
-		dumpAttribute(a, indent);
 	}
 
 	public <T extends Attribute> void dumpAttribute(T a, int indent) {
@@ -153,10 +144,8 @@ public class SimpleDumper {
 		dumper.dumpAttribute(a, cf, indent + 1, out);
 	}
 
-
-
 	private void initDumperMap() {
-		dumperMap = new AttributeDumperMap();// new HashMap<>();
+		dumperMap = new AttributeDumperMap();
 
 	}
 

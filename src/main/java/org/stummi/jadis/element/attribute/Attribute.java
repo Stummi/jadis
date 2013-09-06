@@ -3,11 +3,7 @@ package org.stummi.jadis.element.attribute;
 import org.stummi.jadis.element.Element;
 
 public interface Attribute extends Element {
-	void setAttributeData(byte[] bytes);
+	public void setNameRef(int nameRef);
 
-	byte[] getAttributeData();
-
-	void setNameRef(int nameRef);
-
-	int getNameRef();
+	public int getNameRef();
 }

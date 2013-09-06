@@ -7,7 +7,7 @@ import lombok.SneakyThrows;
 
 import org.stummi.jadis.element.attribute.Attribute;
 import org.stummi.jadis.output.dump.attribute.ExceptionsAttributeDumper;
-import org.stummi.jadis.output.dump.attribute.GenericAttributeDumper;
+import org.stummi.jadis.output.dump.attribute.UnknownAttributeDumper;
 import org.stummi.jadis.output.dump.attribute.InnerClassesAttributeDumper;
 import org.stummi.jadis.output.dump.attribute.SimpleReferenceAttributeDumper;
 
@@ -15,10 +15,10 @@ public class AttributeDumperMap
 		extends
 		HashMap<Class<? extends Attribute>, AttributeDumper<? extends Attribute>> {
 	private static final long serialVersionUID = 1L;
-	private GenericAttributeDumper defaultDumper;
+	private UnknownAttributeDumper defaultDumper;
 
 	public AttributeDumperMap() {
-		defaultDumper = new GenericAttributeDumper();
+		defaultDumper = new UnknownAttributeDumper();
 		putAttributeDumper(SimpleReferenceAttributeDumper.class);
 		putAttributeDumper(ExceptionsAttributeDumper.class);
 		putAttributeDumper(InnerClassesAttributeDumper.class);

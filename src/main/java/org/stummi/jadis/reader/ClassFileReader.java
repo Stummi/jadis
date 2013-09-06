@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.stummi.jadis.JadisInputStream;
-import org.stummi.jadis.element.AttributeInfo;
 import org.stummi.jadis.element.ClassFile;
 import org.stummi.jadis.element.ClassVersion;
 import org.stummi.jadis.element.ConstantPool;
@@ -13,6 +12,7 @@ import org.stummi.jadis.element.FieldInfo;
 import org.stummi.jadis.element.MethodInfo;
 import org.stummi.jadis.element.accessflags.AccessFlag;
 import org.stummi.jadis.element.accessflags.AccessFlagContext;
+import org.stummi.jadis.element.attribute.Attribute;
 
 public class ClassFileReader implements ElementReader<ClassFile> {
 
@@ -22,7 +22,7 @@ public class ClassFileReader implements ElementReader<ClassFile> {
 			throw new IOException("not a class file");
 		}
 		ClassVersion version = jadis.readElement(ClassVersion.class);
-		ConstantPool cp = jadis.readElement(ConstantPool.class);
+		ConstantPool cp = jadis.readConstantPool();
 		List<AccessFlag> af = jadis.readAccessFlags(AccessFlagContext.CLASS);
 		short thisClass = jadis.readShort();
 		short superClass = jadis.readShort();
@@ -34,8 +34,7 @@ public class ClassFileReader implements ElementReader<ClassFile> {
 		// Interfaces i = jadis.readElement(Interfaces.class);
 		List<FieldInfo> fields = jadis.readElementList(FieldInfo.class);
 		List<MethodInfo> methods = jadis.readElementList(MethodInfo.class);
-		List<AttributeInfo> attributes = jadis
-				.readElementList(AttributeInfo.class);
+		List<Attribute> attributes = jadis.readElementList(Attribute.class);
 		return new ClassFile(version, cp, af, thisClass, superClass,
 				interfaceRefs, fields, methods, attributes);
 	}

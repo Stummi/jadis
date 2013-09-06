@@ -11,10 +11,11 @@ import java.util.Map;
 
 import lombok.SneakyThrows;
 
+import org.stummi.jadis.element.ConstantPool;
 import org.stummi.jadis.element.Element;
 import org.stummi.jadis.element.accessflags.AccessFlag;
 import org.stummi.jadis.element.accessflags.AccessFlagContext;
-import org.stummi.jadis.reader.AttributeInfoReader;
+import org.stummi.jadis.reader.AttributeReader;
 import org.stummi.jadis.reader.ClassFileReader;
 import org.stummi.jadis.reader.ClassVersionReader;
 import org.stummi.jadis.reader.ConstantPoolReader;
@@ -22,6 +23,10 @@ import org.stummi.jadis.reader.ElementReader;
 import org.stummi.jadis.reader.FieldInfoReader;
 import org.stummi.jadis.reader.LongConstantReader;
 import org.stummi.jadis.reader.MethodInfoReader;
+import org.stummi.jadis.reader.attribute.ExceptionsAttributeReader;
+import org.stummi.jadis.reader.attribute.InnerClassEntryReader;
+import org.stummi.jadis.reader.attribute.InnerClassesAttributeReader;
+import org.stummi.jadis.reader.attribute.SimpleReferenceAttributeReader;
 import org.stummi.jadis.reader.constant.ClassConstantReader;
 import org.stummi.jadis.reader.constant.DoubleConstantReader;
 import org.stummi.jadis.reader.constant.FieldRefConstantReader;
@@ -35,6 +40,7 @@ import org.stummi.jadis.reader.constant.StringRefConstantReader;
 
 public class JadisInputStream extends DataInputStream {
 	private Map<Class<? extends Element>, ElementReader<? extends Element>> readerMap;
+	private ConstantPool constantPool;
 
 	public JadisInputStream(InputStream in) {
 		super(in);
@@ -47,7 +53,7 @@ public class JadisInputStream extends DataInputStream {
 		putReader(ClassVersionReader.class);
 		putReader(ConstantPoolReader.class);
 		putReader(FieldInfoReader.class);
-		putReader(AttributeInfoReader.class);
+		putReader(AttributeReader.class);
 		putReader(MethodInfoReader.class);
 		
 		putReader(StringConstantReader.class);
@@ -61,6 +67,11 @@ public class JadisInputStream extends DataInputStream {
 		putReader(MethodRefConstantReader.class);
 		putReader(IMethodRefConstantReader.class);
 		putReader(NameAndTypeConstantReader.class);
+
+		putReader(ExceptionsAttributeReader.class);
+		putReader(InnerClassEntryReader.class);
+		putReader(InnerClassesAttributeReader.class);
+		putReader(SimpleReferenceAttributeReader.class);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -85,7 +96,8 @@ public class JadisInputStream extends DataInputStream {
 		if (reader == null) {
 			throw new IOException("there is no reader for " + clazz);
 		}
-		return reader.readElement(this);
+		E ret = reader.readElement(this);
+		return ret;
 	}
 
 	public <E extends Element> List<E> readElementList(Class<E> clazz) throws IOException {
@@ -101,5 +113,16 @@ public class JadisInputStream extends DataInputStream {
 			throws IOException {
 		int bits = readShort();
 		return context.bitsToFlags(bits);
+	}
+
+	// The constant pool is needed to interprete further elements
+	public ConstantPool readConstantPool() throws IOException {
+		ConstantPool cp = readElement(ConstantPool.class);
+		this.constantPool = cp;
+		return cp;
+	}
+
+	public ConstantPool getConstantPool() {
+		return constantPool;
 	}
 }
