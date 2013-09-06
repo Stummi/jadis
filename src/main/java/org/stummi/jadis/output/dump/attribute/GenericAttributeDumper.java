@@ -1,4 +1,4 @@
-package org.stummi.jadis.output.dump;
+package org.stummi.jadis.output.dump.attribute;
 
 import org.stummi.jadis.element.attribute.Attribute;
 

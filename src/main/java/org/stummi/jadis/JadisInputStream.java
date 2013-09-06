@@ -9,6 +9,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import lombok.SneakyThrows;
+
 import org.stummi.jadis.element.Element;
 import org.stummi.jadis.element.accessflags.AccessFlag;
 import org.stummi.jadis.element.accessflags.AccessFlagContext;
@@ -30,8 +32,6 @@ import org.stummi.jadis.reader.constant.MethodRefConstantReader;
 import org.stummi.jadis.reader.constant.NameAndTypeConstantReader;
 import org.stummi.jadis.reader.constant.StringConstantReader;
 import org.stummi.jadis.reader.constant.StringRefConstantReader;
-
-import lombok.SneakyThrows;
 
 public class JadisInputStream extends DataInputStream {
 	private Map<Class<? extends Element>, ElementReader<? extends Element>> readerMap;
@@ -70,13 +70,8 @@ public class JadisInputStream extends DataInputStream {
 				.getGenericInterfaces()[0];
 		Class<? extends Element> readClass = (Class<? extends Element>) pt
 				.getActualTypeArguments()[0];
-		ElementReader<?> reader = createInstance(class1);
+		ElementReader<?> reader = class1.getConstructor().newInstance();
 		readerMap.put(readClass, reader);
-	}
-
-	@SneakyThrows
-	private <T extends ElementReader<?>> T createInstance(Class<T> class1) {
-			return class1.getConstructor().newInstance();
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -106,7 +101,5 @@ public class JadisInputStream extends DataInputStream {
 			throws IOException {
 		int bits = readShort();
 		return context.bitsToFlags(bits);
-
 	}
-
 }

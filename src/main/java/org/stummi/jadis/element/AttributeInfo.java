@@ -4,6 +4,6 @@ import lombok.Value;
 
 @Value
 public class AttributeInfo implements Element {
-	final short nameIndex;
+	final int nameIndex;
 	final byte[] data;
 }

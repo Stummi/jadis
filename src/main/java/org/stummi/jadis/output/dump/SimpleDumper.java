@@ -23,6 +23,8 @@ public class SimpleDumper {
 	private final ClassFile cf;
 	private final PrintStream out;
 
+	private AttributeDumperMap dumperMap;
+
 	public void dump() {
 		dumpHeader();
 		dumpConstantPool();
@@ -31,6 +33,11 @@ public class SimpleDumper {
 		dumpFields();
 		dumpMethods();
 		dumpAttributes();
+	}
+
+	private String getConstantPoolString(int nameIndex) {
+		Constant c = cf.getConstantPool().getConstant(nameIndex);
+		return ((StringConstant) c).getValue();
 	}
 
 	public void dumpHeader() {
@@ -53,7 +60,7 @@ public class SimpleDumper {
 			if (c == null) {
 				continue;
 			}
-			out.println(idx + ": " + c.toResolvedString(constants));
+			out.printf("%s: %s\n", idx, c.toResolvedString(constants));
 		}
 	}
 
@@ -61,16 +68,17 @@ public class SimpleDumper {
 		printHead("CLASS");
 		ConstantPool constantPool = cf.getConstantPool();
 		List<AccessFlag> accessFlags = cf.getAccessFlags();
-		short thisClassId = cf.getThisClassId();
-		short superClassId = cf.getSuperClassId();
+		int thisClassId = cf.getThisClassId();
+		int superClassId = cf.getSuperClassId();
 		Constant[] constants = constantPool.getConstants();
 
-		out.println("Accessflags: " + accessFlags);
+		out.printf("Accessflags: %s\n", accessFlags);
 		Constant thisClass = constantPool.getConstant(thisClassId);
 		Constant superClass = constantPool.getConstant(superClassId);
-		out.println("this: " + thisClass.toResolvedString(constants));
-		out.println("super: "
-				+ (superClass == null ? "<NULL>" : superClass
+		out.printf("this: %s\n", thisClass.toResolvedString(constants));
+		out.printf(
+				"super: %s\n",
+				(superClass == null ? "<NULL>" : superClass
 						.toResolvedString(constants)));
 
 	}
@@ -88,14 +96,10 @@ public class SimpleDumper {
 	public void dumpFields() {
 		printHead("FIELDS");
 		List<FieldInfo> fields = cf.getFields();
-		ConstantPool constantPool = cf.getConstantPool();
 		for (FieldInfo fi : fields) {
-			StringConstant nameConstant = (StringConstant) constantPool
-					.getConstant(fi.getNameIndex());
-			StringConstant descriptorConstant = (StringConstant) constantPool
-					.getConstant(fi.getDescriptorIndex());
-			out.println(fi.getFlags() + " " + nameConstant.getValue() + " "
-					+ descriptorConstant.getValue());
+			String name = getConstantPoolString(fi.getNameIndex());
+			String descriptor = getConstantPoolString(fi.getDescriptorIndex());
+			out.printf("%s %s %s\n", fi.getFlags(), name, descriptor);
 			dumpAttributeInfoList(fi.getAttributes(), 2);
 		}
 	}
@@ -103,17 +107,19 @@ public class SimpleDumper {
 	public void dumpMethods() {
 		printHead("METHODS");
 		List<MethodInfo> methods = cf.getMethods();
-		ConstantPool constantPool = cf.getConstantPool();
-		for (MethodInfo fi : methods) {
-			StringConstant nameConstant = (StringConstant) constantPool
-					.getConstant(fi.getNameIndex());
-			StringConstant descriptorConstant = (StringConstant) constantPool
-					.getConstant(fi.getDescriptorIndex());
-			out.println(fi.getFlags() + " " + nameConstant.getValue() + " "
-					+ descriptorConstant.getValue());
-			dumpAttributeInfoList(fi.getAttributes(), 2);
+		for (MethodInfo mi : methods) {
+			String name = getConstantPoolString(mi.getNameIndex());
+			String descriptor = getConstantPoolString(mi.getDescriptorIndex());
+			out.printf("%s %s %s\n", mi.getFlags(), name, descriptor);
+			dumpAttributeInfoList(mi.getAttributes(), 2);
 
 		}
+	}
+
+	public void dumpAttributes() {
+		printHead("ATTRIBUTES");
+		List<AttributeInfo> attributes = cf.getAttributes();
+		dumpAttributeInfoList(attributes, 1);
 	}
 
 	public void dumpAttributeInfoList(List<AttributeInfo> attributes, int indent) {
@@ -123,36 +129,35 @@ public class SimpleDumper {
 	}
 
 	public void dumpAttributeInfo(AttributeInfo ai, int indent) {
-		Attribute a = AttributeFactory.createFromAttributeInfo(ai);
+		String attributeName = getConstantPoolString(ai.getNameIndex());
+		Attribute a = AttributeFactory.createFromAttributeInfo(attributeName,
+				ai);
 		dumpAttribute(a, indent);
 	}
 
-	public void dumpAttribute(Attribute a, int indent) {
+	public <T extends Attribute> void dumpAttribute(T a, int indent) {
 		for (int idx = 0; idx < indent; idx++) {
 			out.print("    ");
 		}
 
 		out.print("Attribute: ");
-
-		ConstantPool constantPool = cf.getConstantPool();
-		StringConstant nameConstant = (StringConstant) constantPool
-				.getConstant(a.getNameRef());
-		String attributeName = nameConstant.getValue();
+		String attributeName = getConstantPoolString(a.getNameRef());
 		out.println(attributeName);
 
-		getAttributeDumper(a).dumpAttribute(a, cf, indent + 1, out);
+		if (dumperMap == null) {
+			initDumperMap();
+		}
 
+		AttributeDumper<T> dumper = dumperMap.getDumper(a.getClass());
+
+		dumper.dumpAttribute(a, cf, indent + 1, out);
 	}
 
-	private AttributeDumper<Attribute> getAttributeDumper(Attribute a) {
-		// TODO Auto-generated method stub
-		return new GenericAttributeDumper();
-	}
 
-	public void dumpAttributes() {
-		printHead("ATTRIBUTES");
-		List<AttributeInfo> attributes = cf.getAttributes();
-		dumpAttributeInfoList(attributes, 1);
+
+	private void initDumperMap() {
+		dumperMap = new AttributeDumperMap();// new HashMap<>();
+
 	}
 
 	private void printHead(String string) {
