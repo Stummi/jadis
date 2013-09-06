@@ -12,9 +12,9 @@ public class IMethodRefConstantReader implements
 	@Override
 	public IMethodRefConstant readElement(JadisInputStream jadis)
 			throws IOException {
-		short classIndex = jadis.readShort();
-		short nameAndType = jadis.readShort();
-		return new IMethodRefConstant(classIndex, nameAndType);
+		int classRef = jadis.readUnsignedShort();
+		int nameAndType = jadis.readUnsignedShort();
+		return new IMethodRefConstant(classRef, nameAndType);
 	}
 
 }

@@ -11,9 +11,9 @@ public class FieldRefConstantReader implements ElementReader<FieldRefConstant> {
 	@Override
 	public FieldRefConstant readElement(JadisInputStream jadis)
 			throws IOException {
-		short classIndex = jadis.readShort();
-		short nameAndTypeIndex = jadis.readShort();
-		return new FieldRefConstant(classIndex, nameAndTypeIndex);
+		int classRef = jadis.readUnsignedShort();
+		int nameAndTypeRef = jadis.readUnsignedShort();
+		return new FieldRefConstant(classRef, nameAndTypeRef);
 	}
 
 }

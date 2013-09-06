@@ -12,9 +12,9 @@ public class NameAndTypeConstantReader implements
 	@Override
 	public NameAndTypeConstant readElement(JadisInputStream jadis)
 			throws IOException {
-		short nameIndex = jadis.readShort();
-		short descriptorIndex = jadis.readShort();
-		return new NameAndTypeConstant(nameIndex, descriptorIndex);
+		int nameRef = jadis.readUnsignedShort();
+		int descriptorRef = jadis.readUnsignedShort();
+		return new NameAndTypeConstant(nameRef, descriptorRef);
 	}
 
 }

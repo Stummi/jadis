@@ -11,7 +11,7 @@ public class ConstantPoolReader implements ElementReader<ConstantPool> {
 
 	@Override
 	public ConstantPool readElement(JadisInputStream jadis) throws IOException {
-		int poolsize = jadis.readShort();
+		int poolsize = jadis.readUnsignedShort();
 		Constant[] constants = new Constant[poolsize];
 		int poolidx = 1;
 		while (poolidx < poolsize) {

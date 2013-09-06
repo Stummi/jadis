@@ -82,8 +82,8 @@ public class SimpleDumper {
 	public void dumpInterfaces() {
 		printHead("INTERFACES");
 		ConstantPool constantPool = cf.getConstantPool();
-		List<Short> interfaces = cf.getInterfaces();
-		for (Short s : interfaces) {
+		List<Integer> interfaces = cf.getInterfaces();
+		for (Integer s : interfaces) {
 			out.println(constantPool.getConstant(s).toResolvedString(
 					constantPool));
 		}
@@ -93,8 +93,8 @@ public class SimpleDumper {
 		printHead("FIELDS");
 		List<FieldInfo> fields = cf.getFields();
 		for (FieldInfo fi : fields) {
-			String name = getConstantPoolString(fi.getNameIndex());
-			String descriptor = getConstantPoolString(fi.getDescriptorIndex());
+			String name = getConstantPoolString(fi.getNameRef());
+			String descriptor = getConstantPoolString(fi.getDescriptorRef());
 			out.printf("%s %s %s\n", fi.getFlags(), name, descriptor);
 			dumpAttributeList(fi.getAttributes(), 1);
 		}

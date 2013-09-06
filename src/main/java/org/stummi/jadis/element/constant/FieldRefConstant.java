@@ -7,8 +7,8 @@ import org.stummi.jadis.element.ConstantPool;
 @Value
 public class FieldRefConstant implements Constant {
 
-	private final short classRef;
-	private final short ntRef;
+	private final int classRef;
+	private final int ntRef;
 
 	@Override
 	public String toResolvedString(ConstantPool constants) {

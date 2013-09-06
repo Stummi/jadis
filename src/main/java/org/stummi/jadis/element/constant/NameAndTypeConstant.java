@@ -6,8 +6,8 @@ import org.stummi.jadis.element.ConstantPool;
 
 @Value
 public class NameAndTypeConstant implements Constant {
-	private final short nameRef;
-	private final short typeRef;
+	private final int nameRef;
+	private final int typeRef;
 
 	@Override
 	public String toResolvedString(ConstantPool constants) {

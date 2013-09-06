@@ -10,8 +10,8 @@ import org.stummi.jadis.element.attribute.Attribute;
 @Value
 public class MethodInfo implements Element {
 	final private List<AccessFlag> flags;
-	final private short nameIndex;
-	final private short descriptorIndex;
+	final private int nameIndex;
+	final private int descriptorIndex;
 	final private List<Attribute> attributes;
-	
+
 }

@@ -14,7 +14,7 @@ public class ExceptionsAttributeReader implements
 	@Override
 	public ExceptionsAttribute readElement(JadisInputStream jadis)
 			throws IOException {
-		int len = jadis.readShort();
+		int len = jadis.readUnsignedShort();
 		List<Integer> exceptionRefs = new LinkedList<>();
 		for (int idx = 0; idx < len; idx++) {
 			exceptionRefs.add(jadis.readUnsignedShort());

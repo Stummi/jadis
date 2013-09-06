@@ -6,11 +6,11 @@ import org.stummi.jadis.element.ConstantPool;
 
 @Value
 public class IMethodRefConstant implements Constant {
-	private final short classId;
-	private final short ntId;
+	private final int classRef;
+	private final int ntRef;
 
 	@Override
 	public String toResolvedString(ConstantPool constants) {
-		return String.format("IMethod: %d %d", classId, ntId);
+		return String.format("IMethod: %d %d", classRef, ntRef);
 	}
 }

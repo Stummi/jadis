@@ -7,6 +7,7 @@ import lombok.SneakyThrows;
 
 import org.stummi.jadis.element.attribute.Attribute;
 import org.stummi.jadis.output.dump.attribute.AnnotationsAttributeDumper;
+import org.stummi.jadis.output.dump.attribute.CodeAttributeDumper;
 import org.stummi.jadis.output.dump.attribute.ExceptionsAttributeDumper;
 import org.stummi.jadis.output.dump.attribute.InnerClassesAttributeDumper;
 import org.stummi.jadis.output.dump.attribute.SimpleReferenceAttributeDumper;
@@ -23,6 +24,7 @@ public class AttributeDumperMap
 		putAttributeDumper(InnerClassesAttributeDumper.class);
 		putAttributeDumper(UnknownAttributeDumper.class);
 		putAttributeDumper(AnnotationsAttributeDumper.class);
+		putAttributeDumper(CodeAttributeDumper.class);
 	}
 
 	@SneakyThrows

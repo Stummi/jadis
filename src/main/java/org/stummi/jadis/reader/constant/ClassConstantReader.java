@@ -10,7 +10,7 @@ public class ClassConstantReader implements ElementReader<ClassConstant> {
 
 	@Override
 	public ClassConstant readElement(JadisInputStream jadis) throws IOException {
-		return new ClassConstant(jadis.readShort());
+		return new ClassConstant(jadis.readUnsignedShort());
 	}
 
 }

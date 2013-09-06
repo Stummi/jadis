@@ -42,6 +42,30 @@ public abstract class AbstractAttributeDumper<T extends Attribute> implements
 		out.println();
 	}
 
+	protected void printHexDump(byte[] data) {
+		boolean firstLine = true;
+		int idx = 0;
+		for (byte b : data) {
+			if (idx % 16 == 0) {
+				if (!firstLine) {
+					out.println();
+				} else {
+					firstLine = false;
+				}
+
+				printIndent();
+				out.printf("%08X   ", idx);
+			}
+
+			if (idx % 8 == 0) {
+				out.print(" ");
+			}
+			out.printf("%02X ", b);
+			idx++;
+		}
+		out.println();
+	}
+
 	protected void printIndent() {
 		for (int idx = 0; idx < indent; idx++) {
 			out.print("    ");

@@ -24,12 +24,12 @@ public class ClassFileReader implements ElementReader<ClassFile> {
 		ClassVersion version = jadis.readElement(ClassVersion.class);
 		ConstantPool cp = jadis.readConstantPool();
 		List<AccessFlag> af = jadis.readAccessFlags(AccessFlagContext.CLASS);
-		short thisClass = jadis.readShort();
-		short superClass = jadis.readShort();
-		int interfaceCount = jadis.readShort();
-		List<Short> interfaceRefs = new ArrayList<>();
+		int thisClass = jadis.readUnsignedShort();
+		int superClass = jadis.readUnsignedShort();
+		int interfaceCount = jadis.readUnsignedShort();
+		List<Integer> interfaceRefs = new ArrayList<>();
 		for (int idx = 0; idx < interfaceCount; idx++) {
-			interfaceRefs.add(jadis.readShort());
+			interfaceRefs.add(jadis.readUnsignedShort());
 		}
 		// Interfaces i = jadis.readElement(Interfaces.class);
 		List<FieldInfo> fields = jadis.readElementList(FieldInfo.class);

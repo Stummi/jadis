@@ -10,7 +10,7 @@ import org.stummi.jadis.element.attribute.Attribute;
 @Value
 public class FieldInfo implements Element {
 	final List<AccessFlag> flags;
-	final short nameIndex;
-	final short descriptorIndex;
+	final int nameRef;
+	final int descriptorRef;
 	final List<Attribute> attributes;
 }

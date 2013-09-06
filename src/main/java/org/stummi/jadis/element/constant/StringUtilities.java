@@ -6,7 +6,7 @@ final class StringUtilities {
 	private StringUtilities() {
 	}
 
-	public static String createResolvedClassNTRef(short classRef, short ntRef,
+	public static String createResolvedClassNTRef(int classRef, int ntRef,
 			ConstantPool constants) {
 		ClassConstant classConstant = (ClassConstant) constants
 				.getConstant(classRef);
@@ -15,8 +15,8 @@ final class StringUtilities {
 				.getConstant(classNameRef);
 		NameAndTypeConstant ntConstant = (NameAndTypeConstant) constants
 				.getConstant(ntRef);
-		short nameRef = ntConstant.getNameRef();
-		short typeRef = ntConstant.getTypeRef();
+		int nameRef = ntConstant.getNameRef();
+		int typeRef = ntConstant.getTypeRef();
 		String name = constants.getStringConstantValue(nameRef);
 		String type = constants.getStringConstantValue(typeRef);
 

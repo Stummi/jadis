@@ -28,7 +28,9 @@ import org.stummi.jadis.reader.attribute.AnnotationElementReader;
 import org.stummi.jadis.reader.attribute.AnnotationElementValueReader;
 import org.stummi.jadis.reader.attribute.AnnotationsAttributeReader;
 import org.stummi.jadis.reader.attribute.AnnotationsEntryReader;
+import org.stummi.jadis.reader.attribute.CodeAttributeReader;
 import org.stummi.jadis.reader.attribute.EnumConstantAnnotationValueReader;
+import org.stummi.jadis.reader.attribute.ExceptionEntryReader;
 import org.stummi.jadis.reader.attribute.ExceptionsAttributeReader;
 import org.stummi.jadis.reader.attribute.InnerClassEntryReader;
 import org.stummi.jadis.reader.attribute.InnerClassesAttributeReader;
@@ -53,7 +55,7 @@ public class JadisInputStream extends DataInputStream {
 		super(in);
 		initMap();
 	}
-	
+
 	private void initMap() {
 		readerMap = new HashMap<>();
 		putReader(ClassFileReader.class);
@@ -62,7 +64,7 @@ public class JadisInputStream extends DataInputStream {
 		putReader(FieldInfoReader.class);
 		putReader(AttributeReader.class);
 		putReader(MethodInfoReader.class);
-		
+
 		putReader(StringConstantReader.class);
 		putReader(IntegerConstantReader.class);
 		putReader(FloatConstantReader.class);
@@ -79,7 +81,9 @@ public class JadisInputStream extends DataInputStream {
 		putReader(InnerClassEntryReader.class);
 		putReader(InnerClassesAttributeReader.class);
 		putReader(SimpleReferenceAttributeReader.class);
+		putReader(CodeAttributeReader.class);
 		putReader(AnnotationsAttributeReader.class);
+		putReader(ExceptionEntryReader.class);
 		putReader(AnnotationsEntryReader.class);
 		putReader(AnnotationElementReader.class);
 		putReader(ReferenceAnnotationValueReader.class);
@@ -98,14 +102,13 @@ public class JadisInputStream extends DataInputStream {
 		ElementReader<?> reader = class1.getConstructor().newInstance();
 		readerMap.put(readClass, reader);
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public <E extends Element> ElementReader<E> getReaderForElement(Class<E> e) {
 		return (ElementReader<E>) readerMap.get(e);
 	}
 
-	public <E extends Element> E readElement(Class<E> clazz)
-			throws IOException {
+	public <E extends Element> E readElement(Class<E> clazz) throws IOException {
 		ElementReader<E> reader = getReaderForElement(clazz);
 		if (reader == null) {
 			throw new IOException("there is no reader for " + clazz);
@@ -114,9 +117,10 @@ public class JadisInputStream extends DataInputStream {
 		return ret;
 	}
 
-	public <E extends Element> List<E> readElementList(Class<E> clazz) throws IOException {
+	public <E extends Element> List<E> readElementList(Class<E> clazz)
+			throws IOException {
 		List<E> ret = new ArrayList<>();
-		int count = readShort();
+		int count = readUnsignedShort();
 		for (int idx = 0; idx < count; idx++) {
 			ret.add(readElement(clazz));
 		}

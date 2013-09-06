@@ -9,8 +9,8 @@ public class ClassVersionReader implements ElementReader<ClassVersion> {
 
 	@Override
 	public ClassVersion readElement(JadisInputStream jadis) throws IOException {
-		int minor = jadis.readShort();
-		int major = jadis.readShort();
+		int minor = jadis.readUnsignedShort();
+		int major = jadis.readUnsignedShort();
 		return new ClassVersion(major, minor);
 	}
 

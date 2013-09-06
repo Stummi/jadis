@@ -12,8 +12,8 @@ public class MethodRefConstantReader implements
 	@Override
 	public MethodRefConstant readElement(JadisInputStream jadis)
 			throws IOException {
-		short classIndex = jadis.readShort();
-		short nameAndType = jadis.readShort();
+		int classIndex = jadis.readUnsignedShort();
+		int nameAndType = jadis.readUnsignedShort();
 		return new MethodRefConstant(classIndex, nameAndType);
 	}
 

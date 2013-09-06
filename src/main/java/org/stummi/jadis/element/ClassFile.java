@@ -14,7 +14,7 @@ public class ClassFile implements Element {
 	final private List<AccessFlag> accessFlags;
 	final int thisClassId;
 	final int superClassId;
-	final private List<Short> interfaces;
+	final private List<Integer> interfaces;
 	final private List<FieldInfo> fields;
 	final private List<MethodInfo> methods;
 	final private List<Attribute> attributes;

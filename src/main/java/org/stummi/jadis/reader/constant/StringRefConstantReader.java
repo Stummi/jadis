@@ -12,7 +12,7 @@ public class StringRefConstantReader implements
 	@Override
 	public StringRefConstant readElement(JadisInputStream jadis)
 			throws IOException {
-		return new StringRefConstant(jadis.readShort());
+		return new StringRefConstant(jadis.readUnsignedShort());
 	}
 
 }

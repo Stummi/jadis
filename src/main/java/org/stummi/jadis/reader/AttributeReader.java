@@ -7,6 +7,7 @@ import java.util.Map;
 import org.stummi.jadis.JadisInputStream;
 import org.stummi.jadis.element.attribute.AnnotationsAttribute;
 import org.stummi.jadis.element.attribute.Attribute;
+import org.stummi.jadis.element.attribute.CodeAttribute;
 import org.stummi.jadis.element.attribute.ExceptionsAttribute;
 import org.stummi.jadis.element.attribute.InnerClassesAttribute;
 import org.stummi.jadis.element.attribute.SimpleReferenceAttribute;
@@ -26,11 +27,12 @@ public class AttributeReader implements ElementReader<Attribute> {
 		knownAttributes.put("SourceFile", SimpleReferenceAttribute.class);
 		knownAttributes.put("Exceptions", ExceptionsAttribute.class);
 		knownAttributes.put("InnerClasses", InnerClassesAttribute.class);
+		knownAttributes.put("Code", CodeAttribute.class);
 	}
 
 	@Override
 	public Attribute readElement(JadisInputStream jadis) throws IOException {
-		short attrNameRef = jadis.readShort();
+		int attrNameRef = jadis.readUnsignedShort();
 		int attrLen = jadis.readInt();
 		String attributeName = jadis.getConstantPool().getStringConstantValue(
 				attrNameRef);
