@@ -1,4 +1,4 @@
-package org.stummi.jadis;
+package org.stummi.jadis.test;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;

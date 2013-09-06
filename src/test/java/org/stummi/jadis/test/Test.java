@@ -1,4 +1,4 @@
-package org.stummi.jadis;
+package org.stummi.jadis.test;
 
 import java.io.Serializable;
 
