@@ -15,7 +15,8 @@ public class Test implements Serializable, TestInterface {
 	private static final long serialVersionUID = 1234567L;
 
 	int foo;
-	@TestAnnotation(value = "asd", testEnum = TestEnum.BAR)
+	@TestAnnotation(value = "asd", testEnum = TestEnum.BAR, nested = {
+			@TestNestedAnnotation("foo"), @TestNestedAnnotation("bar") })
 	public String bar = "asdf";
 	public int bla = 42;
 

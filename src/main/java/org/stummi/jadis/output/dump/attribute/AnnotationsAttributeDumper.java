@@ -22,17 +22,22 @@ public class AnnotationsAttributeDumper extends
 			int typeRef = av.getTypeRef();
 			printfln("%s", cp.getConstant(typeRef).toResolvedString(constants));
 			for (AnnotationElement ae : av.getElementValues()) {
-				String name = cp.getStringConstantValue(ae.getElementNameRef());
-				AnnotationElementValue value = ae.getValue();
-				indent++;
-				printfln("%s", name);
-				indent++;
-				dumpValue(value);
-				indent--;
-				indent--;
+				dumpAnnotationElement(ae);
 			}
 		}
 
+	}
+
+	private void dumpAnnotationElement(AnnotationElement ae) {
+		ConstantPool cp = classFile.getConstantPool();
+		String name = cp.getStringConstantValue(ae.getElementNameRef());
+		AnnotationElementValue value = ae.getValue();
+		indent++;
+		printfln("%s", name);
+		indent++;
+		dumpValue(value);
+		indent--;
+		indent--;
 	}
 
 	private void dumpValue(AnnotationElementValue value) {
@@ -55,6 +60,13 @@ public class AnnotationsAttributeDumper extends
 					.getStringConstantValue(ecav.getConstNameRef());
 
 			printfln("%s -> %s", typeName, constName);
+		} else if (value instanceof AnnotationsEntry) {
+			AnnotationsEntry ae = (AnnotationsEntry) value;
+			printfln("Annotation: "
+					+ cp.getConstant(ae.getTypeRef()).toResolvedString(
+							constants));
+			for (AnnotationElement elem : ae.getElementValues())
+				dumpAnnotationElement(elem);
 		} else {
 			printfln("%s", value);
 		}

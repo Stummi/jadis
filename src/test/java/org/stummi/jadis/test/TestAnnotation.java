@@ -5,8 +5,8 @@ import java.lang.annotation.RetentionPolicy;
 
 @Retention(RetentionPolicy.RUNTIME)
 public @interface TestAnnotation {
-
 	String value();
-
 	TestEnum testEnum() default TestEnum.FOO;
+
+	TestNestedAnnotation[] nested();
 }
