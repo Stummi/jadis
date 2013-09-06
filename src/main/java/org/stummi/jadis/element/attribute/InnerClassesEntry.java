@@ -12,7 +12,7 @@ import org.stummi.jadis.element.accessflags.AccessFlag;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class InnerClassEntry implements Element {
+public class InnerClassesEntry implements Element {
 	int innerClassInfoIndex;
 	int outerClassInfoIndex;
 	int innerNameIndex;

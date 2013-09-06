@@ -6,13 +6,13 @@ import java.util.List;
 import org.stummi.jadis.JadisInputStream;
 import org.stummi.jadis.element.accessflags.AccessFlag;
 import org.stummi.jadis.element.accessflags.AccessFlagContext;
-import org.stummi.jadis.element.attribute.InnerClassEntry;
+import org.stummi.jadis.element.attribute.InnerClassesEntry;
 import org.stummi.jadis.reader.ElementReader;
 
-public class InnerClassEntryReader implements ElementReader<InnerClassEntry> {
+public class InnerClassEntryReader implements ElementReader<InnerClassesEntry> {
 
 	@Override
-	public InnerClassEntry readElement(JadisInputStream jadis)
+	public InnerClassesEntry readElement(JadisInputStream jadis)
 			throws IOException {
 		int innerClassInfoIndex = jadis.readUnsignedShort();
 		int outerClassInfoIndex = jadis.readUnsignedShort();
@@ -20,7 +20,7 @@ public class InnerClassEntryReader implements ElementReader<InnerClassEntry> {
 		List<AccessFlag> innerClassAccessFlags = jadis
 				.readAccessFlags(AccessFlagContext.NESTED);
 
-		return new InnerClassEntry(innerClassInfoIndex, outerClassInfoIndex,
+		return new InnerClassesEntry(innerClassInfoIndex, outerClassInfoIndex,
 				innerNameIndex, innerClassAccessFlags);
 	}
 

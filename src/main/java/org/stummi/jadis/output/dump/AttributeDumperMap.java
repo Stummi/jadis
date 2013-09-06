@@ -6,22 +6,23 @@ import java.util.HashMap;
 import lombok.SneakyThrows;
 
 import org.stummi.jadis.element.attribute.Attribute;
+import org.stummi.jadis.output.dump.attribute.AnnotationsAttributeDumper;
 import org.stummi.jadis.output.dump.attribute.ExceptionsAttributeDumper;
-import org.stummi.jadis.output.dump.attribute.UnknownAttributeDumper;
 import org.stummi.jadis.output.dump.attribute.InnerClassesAttributeDumper;
 import org.stummi.jadis.output.dump.attribute.SimpleReferenceAttributeDumper;
+import org.stummi.jadis.output.dump.attribute.UnknownAttributeDumper;
 
 public class AttributeDumperMap
 		extends
 		HashMap<Class<? extends Attribute>, AttributeDumper<? extends Attribute>> {
 	private static final long serialVersionUID = 1L;
-	private UnknownAttributeDumper defaultDumper;
 
 	public AttributeDumperMap() {
-		defaultDumper = new UnknownAttributeDumper();
 		putAttributeDumper(SimpleReferenceAttributeDumper.class);
 		putAttributeDumper(ExceptionsAttributeDumper.class);
 		putAttributeDumper(InnerClassesAttributeDumper.class);
+		putAttributeDumper(UnknownAttributeDumper.class);
+		putAttributeDumper(AnnotationsAttributeDumper.class);
 	}
 
 	@SneakyThrows
@@ -37,11 +38,7 @@ public class AttributeDumperMap
 
 	@SuppressWarnings("unchecked")
 	public <T extends Attribute> AttributeDumper<T> getDumper(Class<?> class1) {
-		AttributeDumper<T> ret = (AttributeDumper<T>) get(class1);
-		if (ret == null) {
-			ret = (AttributeDumper<T>) defaultDumper;
-		}
-		return ret;
+		return (AttributeDumper<T>) get(class1);
 	}
 
 }

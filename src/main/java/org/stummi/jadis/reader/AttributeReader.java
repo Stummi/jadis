@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.stummi.jadis.JadisInputStream;
+import org.stummi.jadis.element.attribute.AnnotationsAttribute;
 import org.stummi.jadis.element.attribute.Attribute;
 import org.stummi.jadis.element.attribute.ExceptionsAttribute;
 import org.stummi.jadis.element.attribute.InnerClassesAttribute;
@@ -17,6 +18,10 @@ public class AttributeReader implements ElementReader<Attribute> {
 
 	public AttributeReader() {
 		knownAttributes = new HashMap<>();
+		knownAttributes.put("RuntimeVisibleAnnotations",
+				AnnotationsAttribute.class);
+		knownAttributes.put("RuntimeInvisibleAnnotations",
+				AnnotationsAttribute.class);
 		knownAttributes.put("ConstantValue", SimpleReferenceAttribute.class);
 		knownAttributes.put("SourceFile", SimpleReferenceAttribute.class);
 		knownAttributes.put("Exceptions", ExceptionsAttribute.class);
@@ -29,6 +34,7 @@ public class AttributeReader implements ElementReader<Attribute> {
 		int attrLen = jadis.readInt();
 		String attributeName = jadis.getConstantPool().getStringConstantValue(
 				attrNameRef);
+		// jadis.readInt()
 		Attribute a;
 		if (knownAttributes.containsKey(attributeName)) {
 			Class<? extends Attribute> targetClass = knownAttributes

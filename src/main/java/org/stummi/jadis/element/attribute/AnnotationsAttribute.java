@@ -6,9 +6,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+@AllArgsConstructor
 @Data
 @EqualsAndHashCode(callSuper = true)
-@AllArgsConstructor
-public class InnerClassesAttribute extends AbstractAttribute {
-	private List<InnerClassesEntry> entries;
+public class AnnotationsAttribute extends AbstractAttribute {
+	private List<AnnotationsEntry> entries;
 }

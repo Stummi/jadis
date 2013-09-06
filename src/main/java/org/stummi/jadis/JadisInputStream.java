@@ -15,6 +15,7 @@ import org.stummi.jadis.element.ConstantPool;
 import org.stummi.jadis.element.Element;
 import org.stummi.jadis.element.accessflags.AccessFlag;
 import org.stummi.jadis.element.accessflags.AccessFlagContext;
+import org.stummi.jadis.reader.ArrayAnnotationValueReader;
 import org.stummi.jadis.reader.AttributeReader;
 import org.stummi.jadis.reader.ClassFileReader;
 import org.stummi.jadis.reader.ClassVersionReader;
@@ -23,9 +24,15 @@ import org.stummi.jadis.reader.ElementReader;
 import org.stummi.jadis.reader.FieldInfoReader;
 import org.stummi.jadis.reader.LongConstantReader;
 import org.stummi.jadis.reader.MethodInfoReader;
+import org.stummi.jadis.reader.attribute.AnnotationElementReader;
+import org.stummi.jadis.reader.attribute.AnnotationElementValueReader;
+import org.stummi.jadis.reader.attribute.AnnotationsAttributeReader;
+import org.stummi.jadis.reader.attribute.AnnotationsEntryReader;
+import org.stummi.jadis.reader.attribute.EnumConstantAnnotationValueReader;
 import org.stummi.jadis.reader.attribute.ExceptionsAttributeReader;
 import org.stummi.jadis.reader.attribute.InnerClassEntryReader;
 import org.stummi.jadis.reader.attribute.InnerClassesAttributeReader;
+import org.stummi.jadis.reader.attribute.ReferenceAnnotationValueReader;
 import org.stummi.jadis.reader.attribute.SimpleReferenceAttributeReader;
 import org.stummi.jadis.reader.constant.ClassConstantReader;
 import org.stummi.jadis.reader.constant.DoubleConstantReader;
@@ -72,6 +79,13 @@ public class JadisInputStream extends DataInputStream {
 		putReader(InnerClassEntryReader.class);
 		putReader(InnerClassesAttributeReader.class);
 		putReader(SimpleReferenceAttributeReader.class);
+		putReader(AnnotationsAttributeReader.class);
+		putReader(AnnotationsEntryReader.class);
+		putReader(AnnotationElementReader.class);
+		putReader(ReferenceAnnotationValueReader.class);
+		putReader(AnnotationElementValueReader.class);
+		putReader(ArrayAnnotationValueReader.class);
+		putReader(EnumConstantAnnotationValueReader.class);
 	}
 
 	@SuppressWarnings("unchecked")

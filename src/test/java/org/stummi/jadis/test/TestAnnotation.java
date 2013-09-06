@@ -8,4 +8,5 @@ public @interface TestAnnotation {
 
 	String value();
 
+	TestEnum testEnum() default TestEnum.FOO;
 }

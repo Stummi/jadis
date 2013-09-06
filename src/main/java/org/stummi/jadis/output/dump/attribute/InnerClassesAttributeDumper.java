@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.stummi.jadis.element.ConstantPool;
 import org.stummi.jadis.element.accessflags.AccessFlag;
-import org.stummi.jadis.element.attribute.InnerClassEntry;
+import org.stummi.jadis.element.attribute.InnerClassesEntry;
 import org.stummi.jadis.element.attribute.InnerClassesAttribute;
 import org.stummi.jadis.element.constant.Constant;
 
@@ -15,7 +15,7 @@ public class InnerClassesAttributeDumper extends
 	protected void dumpAttribute(InnerClassesAttribute attribute) {
 		ConstantPool cp = classFile.getConstantPool();
 		Constant[] constants = cp.getConstants();
-		for (InnerClassEntry e : attribute.getEntries()) {
+		for (InnerClassesEntry e : attribute.getEntries()) {
 			List<AccessFlag> flags = e.getInnerClassAccessFlags();
 			int innerClassInfoRef = e.getInnerClassInfoIndex();
 			int outerClassInfoRef = e.getOuterClassInfoIndex();

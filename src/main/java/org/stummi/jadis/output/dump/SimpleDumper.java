@@ -98,7 +98,7 @@ public class SimpleDumper {
 			String name = getConstantPoolString(fi.getNameIndex());
 			String descriptor = getConstantPoolString(fi.getDescriptorIndex());
 			out.printf("%s %s %s\n", fi.getFlags(), name, descriptor);
-			dumpAttributeList(fi.getAttributes(), 2);
+			dumpAttributeList(fi.getAttributes(), 1);
 		}
 	}
 
@@ -109,7 +109,7 @@ public class SimpleDumper {
 			String name = getConstantPoolString(mi.getNameIndex());
 			String descriptor = getConstantPoolString(mi.getDescriptorIndex());
 			out.printf("%s %s %s\n", mi.getFlags(), name, descriptor);
-			dumpAttributeList(mi.getAttributes(), 2);
+			dumpAttributeList(mi.getAttributes(), 1);
 
 		}
 	}
@@ -117,7 +117,7 @@ public class SimpleDumper {
 	public void dumpAttributes() {
 		printHead("ATTRIBUTES");
 		List<Attribute> attributes = cf.getAttributes();
-		dumpAttributeList(attributes, 1);
+		dumpAttributeList(attributes, 0);
 	}
 
 	public void dumpAttributeList(List<Attribute> attributes, int indent) {
