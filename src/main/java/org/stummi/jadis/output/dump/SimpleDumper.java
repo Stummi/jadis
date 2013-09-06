@@ -1,8 +1,10 @@
-package org.stummi.jadis.output;
+package org.stummi.jadis.output.dump;
 
 import java.io.PrintStream;
 import java.util.Date;
 import java.util.List;
+
+import lombok.RequiredArgsConstructor;
 
 import org.stummi.jadis.element.AttributeInfo;
 import org.stummi.jadis.element.ClassFile;
@@ -11,10 +13,10 @@ import org.stummi.jadis.element.ConstantPool;
 import org.stummi.jadis.element.FieldInfo;
 import org.stummi.jadis.element.MethodInfo;
 import org.stummi.jadis.element.accessflags.AccessFlag;
+import org.stummi.jadis.element.attribute.Attribute;
+import org.stummi.jadis.element.attribute.AttributeFactory;
 import org.stummi.jadis.element.constant.Constant;
 import org.stummi.jadis.element.constant.StringConstant;
-
-import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public class SimpleDumper {
@@ -87,7 +89,6 @@ public class SimpleDumper {
 		printHead("FIELDS");
 		List<FieldInfo> fields = cf.getFields();
 		ConstantPool constantPool = cf.getConstantPool();
-		Constant[] constants = constantPool.getConstants();
 		for (FieldInfo fi : fields) {
 			StringConstant nameConstant = (StringConstant) constantPool
 					.getConstant(fi.getNameIndex());
@@ -95,11 +96,7 @@ public class SimpleDumper {
 					.getConstant(fi.getDescriptorIndex());
 			out.println(fi.getFlags() + " " + nameConstant.getValue() + " "
 					+ descriptorConstant.getValue());
-			for (AttributeInfo ai : fi.getAttributes()) {
-				Constant aNameConstant = constantPool.getConstant(ai
-						.getNameIndex());
-				out.println("    " + aNameConstant.toResolvedString(constants));
-			}
+			dumpAttributeInfoList(fi.getAttributes(), 2);
 		}
 	}
 
@@ -107,7 +104,6 @@ public class SimpleDumper {
 		printHead("METHODS");
 		List<MethodInfo> methods = cf.getMethods();
 		ConstantPool constantPool = cf.getConstantPool();
-		Constant[] constants = constantPool.getConstants();
 		for (MethodInfo fi : methods) {
 			StringConstant nameConstant = (StringConstant) constantPool
 					.getConstant(fi.getNameIndex());
@@ -115,26 +111,50 @@ public class SimpleDumper {
 					.getConstant(fi.getDescriptorIndex());
 			out.println(fi.getFlags() + " " + nameConstant.getValue() + " "
 					+ descriptorConstant.getValue());
-			for (AttributeInfo ai : fi.getAttributes()) {
-				Constant aNameConstant = constantPool.getConstant(ai
-						.getNameIndex());
-				out.println("    " + aNameConstant.toResolvedString(constants));
-			}
+			dumpAttributeInfoList(fi.getAttributes(), 2);
+
 		}
+	}
+
+	public void dumpAttributeInfoList(List<AttributeInfo> attributes, int indent) {
+		for (AttributeInfo ai : attributes) {
+			dumpAttributeInfo(ai, indent);
+		}
+	}
+
+	public void dumpAttributeInfo(AttributeInfo ai, int indent) {
+		Attribute a = AttributeFactory.createFromAttributeInfo(ai);
+		dumpAttribute(a, indent);
+	}
+
+	public void dumpAttribute(Attribute a, int indent) {
+		for (int idx = 0; idx < indent; idx++) {
+			out.print("    ");
+		}
+
+		out.print("Attribute: ");
+
+		ConstantPool constantPool = cf.getConstantPool();
+		StringConstant nameConstant = (StringConstant) constantPool
+				.getConstant(a.getNameRef());
+		String attributeName = nameConstant.getValue();
+		out.println(attributeName);
+
+		getAttributeDumper(a).dumpAttribute(a, cf, indent + 1, out);
+
+	}
+
+	private AttributeDumper<Attribute> getAttributeDumper(Attribute a) {
+		// TODO Auto-generated method stub
+		return new GenericAttributeDumper();
 	}
 
 	public void dumpAttributes() {
-
 		printHead("ATTRIBUTES");
 		List<AttributeInfo> attributes = cf.getAttributes();
-		ConstantPool constantPool = cf.getConstantPool();
-		Constant[] constants = constantPool.getConstants();
-		for (AttributeInfo ai : attributes) {
-			Constant aNameConstant = constantPool
-					.getConstant(ai.getNameIndex());
-			out.println("    " + aNameConstant.toResolvedString(constants));
-		}
+		dumpAttributeInfoList(attributes, 1);
 	}
+
 	private void printHead(String string) {
 		System.out.printf("========== %s ==========\n", string);
 	}

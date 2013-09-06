@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import org.stummi.jadis.element.ClassFile;
-import org.stummi.jadis.output.SimpleDumper;
+import org.stummi.jadis.output.dump.SimpleDumper;
 
 public class TestDump {
 	public static void main(String[] args) throws IOException {
