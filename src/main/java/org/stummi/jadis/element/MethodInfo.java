@@ -5,13 +5,12 @@ import java.util.List;
 import lombok.Value;
 
 import org.stummi.jadis.element.accessflags.AccessFlag;
-import org.stummi.jadis.element.attribute.Attribute;
 
 @Value
 public class MethodInfo implements Element {
 	final private List<AccessFlag> flags;
 	final private int nameIndex;
 	final private int descriptorIndex;
-	final private List<Attribute> attributes;
+	final private AttributePool attributePool;
 
 }

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.stummi.jadis.JadisInputStream;
+import org.stummi.jadis.element.AttributePool;
 import org.stummi.jadis.element.ClassFile;
 import org.stummi.jadis.element.ClassVersion;
 import org.stummi.jadis.element.ConstantPool;
@@ -12,7 +13,6 @@ import org.stummi.jadis.element.FieldInfo;
 import org.stummi.jadis.element.MethodInfo;
 import org.stummi.jadis.element.accessflags.AccessFlag;
 import org.stummi.jadis.element.accessflags.AccessFlagContext;
-import org.stummi.jadis.element.attribute.Attribute;
 
 public class ClassFileReader implements ElementReader<ClassFile> {
 
@@ -34,7 +34,7 @@ public class ClassFileReader implements ElementReader<ClassFile> {
 		// Interfaces i = jadis.readElement(Interfaces.class);
 		List<FieldInfo> fields = jadis.readElementList(FieldInfo.class);
 		List<MethodInfo> methods = jadis.readElementList(MethodInfo.class);
-		List<Attribute> attributes = jadis.readElementList(Attribute.class);
+		AttributePool attributes = jadis.readElement(AttributePool.class);
 		return new ClassFile(version, cp, af, thisClass, superClass,
 				interfaceRefs, fields, methods, attributes);
 	}

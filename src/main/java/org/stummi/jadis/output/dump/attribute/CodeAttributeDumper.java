@@ -1,5 +1,11 @@
 package org.stummi.jadis.output.dump.attribute;
 
+import org.stummi.jadis.code.ByteCode;
+import org.stummi.jadis.code.ByteCodeParser;
+import org.stummi.jadis.code.Instruction;
+import org.stummi.jadis.code.Mnemonic;
+import org.stummi.jadis.code.MnemonicParam;
+import org.stummi.jadis.element.ConstantPool;
 import org.stummi.jadis.element.attribute.CodeAttribute;
 import org.stummi.jadis.element.attribute.ExceptionEntry;
 
@@ -11,7 +17,7 @@ public class CodeAttributeDumper extends AbstractAttributeDumper<CodeAttribute> 
 		printfln("max_locals: %d", attribute.getMaxLocals());
 		printfln("code: ");
 		indent++;
-		printHexDump(attribute.getCode());
+		dumpCode(attribute.getCode());
 		indent--;
 		printfln("exception handlers:");
 		indent++;
@@ -27,5 +33,44 @@ public class CodeAttributeDumper extends AbstractAttributeDumper<CodeAttribute> 
 		}
 		indent--;
 
+	}
+
+	private void dumpCode(byte[] code) {
+		ByteCodeParser bcp = new ByteCodeParser();
+		try {
+			ByteCode bc = bcp.parse(code);
+			for (Instruction i : bc.getInstructions()) {
+				printIndent();
+				Mnemonic mnemonic = i.getMnemonic();
+				MnemonicParam[] mnemonicParams = mnemonic.getParams();
+				Integer[] instructionArgs = i.getArgs();
+
+				out.printf(i.getMnemonic().toString());
+				for (int idx = 0; idx < mnemonicParams.length; idx++) {
+					MnemonicParam paramType = mnemonicParams[idx];
+					Integer instructionArg = instructionArgs[idx];
+					printInstructionArg(paramType, instructionArg);
+				}
+				out.println();
+			}
+		} catch (Exception ioe) {
+			printfln("PARSER ERROR: %s", ioe.getLocalizedMessage());
+			return;
+		}
+	}
+
+	private void printInstructionArg(MnemonicParam paramType, Integer arg) {
+		switch (paramType) {
+		case NUL:
+			break;
+		case CONST_REF:
+			ConstantPool cp = classFile.getConstantPool();
+			out.printf(" (%d -> %s)", arg, cp.getConstant(arg)
+					.toResolvedString(cp));
+			break;
+		default:
+			out.printf(" %d", arg);
+			break;
+		}
 	}
 }

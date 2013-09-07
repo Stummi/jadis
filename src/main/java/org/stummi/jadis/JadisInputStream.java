@@ -16,6 +16,7 @@ import org.stummi.jadis.element.Element;
 import org.stummi.jadis.element.accessflags.AccessFlag;
 import org.stummi.jadis.element.accessflags.AccessFlagContext;
 import org.stummi.jadis.reader.ArrayAnnotationValueReader;
+import org.stummi.jadis.reader.AttributePoolReader;
 import org.stummi.jadis.reader.AttributeReader;
 import org.stummi.jadis.reader.ClassFileReader;
 import org.stummi.jadis.reader.ClassVersionReader;
@@ -76,6 +77,7 @@ public class JadisInputStream extends DataInputStream {
 		putReader(MethodRefConstantReader.class);
 		putReader(IMethodRefConstantReader.class);
 		putReader(NameAndTypeConstantReader.class);
+		putReader(AttributePoolReader.class);
 
 		putReader(ExceptionsAttributeReader.class);
 		putReader(InnerClassEntryReader.class);

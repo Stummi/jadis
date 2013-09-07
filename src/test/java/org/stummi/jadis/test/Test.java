@@ -41,4 +41,12 @@ public class Test implements Serializable, TestInterface {
 		}
 
 	}
+
+	public int arraySum(int... values) {
+		int ret = 0;
+		for (int v : values) {
+			ret += v;
+		}
+		return ret;
+	}
 }

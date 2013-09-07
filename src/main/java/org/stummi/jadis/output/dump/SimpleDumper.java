@@ -6,6 +6,7 @@ import java.util.List;
 
 import lombok.RequiredArgsConstructor;
 
+import org.stummi.jadis.element.AttributePool;
 import org.stummi.jadis.element.ClassFile;
 import org.stummi.jadis.element.ClassVersion;
 import org.stummi.jadis.element.ConstantPool;
@@ -96,7 +97,7 @@ public class SimpleDumper {
 			String name = getConstantPoolString(fi.getNameRef());
 			String descriptor = getConstantPoolString(fi.getDescriptorRef());
 			out.printf("%s %s %s\n", fi.getFlags(), name, descriptor);
-			dumpAttributeList(fi.getAttributes(), 1);
+			dumpAttributePool(fi.getAttributePool(), 1);
 		}
 	}
 
@@ -107,15 +108,18 @@ public class SimpleDumper {
 			String name = getConstantPoolString(mi.getNameIndex());
 			String descriptor = getConstantPoolString(mi.getDescriptorIndex());
 			out.printf("%s %s %s\n", mi.getFlags(), name, descriptor);
-			dumpAttributeList(mi.getAttributes(), 1);
+			dumpAttributePool(mi.getAttributePool(), 1);
 
 		}
 	}
 
 	public void dumpAttributes() {
 		printHead("ATTRIBUTES");
-		List<Attribute> attributes = cf.getAttributes();
-		dumpAttributeList(attributes, 0);
+		dumpAttributePool(cf.getAttributePool(), 0);
+	}
+
+	public void dumpAttributePool(AttributePool pool, int indent) {
+		dumpAttributeList(pool.getAttributes(), indent);
 	}
 
 	public void dumpAttributeList(List<Attribute> attributes, int indent) {
