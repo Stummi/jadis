@@ -1,5 +1,6 @@
 package org.stummi.jadis.output.dump.attribute;
 
+import java.io.IOException;
 import java.io.PrintStream;
 
 import org.stummi.jadis.element.ClassFile;
@@ -15,7 +16,8 @@ public abstract class AbstractAttributeDumper<T extends Attribute> implements
 
 	@Override
 	public final synchronized void dumpAttribute(T attribute,
-			ClassFile classFile, int indent, PrintStream out) {
+			ClassFile classFile, int indent, PrintStream out)
+			throws IOException {
 		this.classFile = classFile;
 		this.indent = indent;
 		this.out = out;
@@ -29,7 +31,7 @@ public abstract class AbstractAttributeDumper<T extends Attribute> implements
 		}
 	}
 
-	protected abstract void dumpAttribute(T attribute);
+	protected abstract void dumpAttribute(T attribute) throws IOException;
 
 	protected void println(String line) {
 		printIndent();

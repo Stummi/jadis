@@ -1,5 +1,7 @@
 package org.stummi.jadis.output.dump.attribute;
 
+import java.io.IOException;
+
 import org.stummi.jadis.code.ByteCode;
 import org.stummi.jadis.code.ByteCodeParser;
 import org.stummi.jadis.code.Instruction;
@@ -12,7 +14,7 @@ import org.stummi.jadis.element.attribute.ExceptionEntry;
 public class CodeAttributeDumper extends AbstractAttributeDumper<CodeAttribute> {
 
 	@Override
-	protected void dumpAttribute(CodeAttribute attribute) {
+	protected void dumpAttribute(CodeAttribute attribute) throws IOException {
 		printfln("max_stack: %d", attribute.getMaxStack());
 		printfln("max_locals: %d", attribute.getMaxLocals());
 		printfln("code: ");
@@ -35,27 +37,23 @@ public class CodeAttributeDumper extends AbstractAttributeDumper<CodeAttribute> 
 
 	}
 
-	private void dumpCode(byte[] code) {
+	private void dumpCode(byte[] code) throws IOException {
 		ByteCodeParser bcp = new ByteCodeParser();
-		try {
-			ByteCode bc = bcp.parse(code);
-			for (Instruction i : bc.getInstructions()) {
-				printIndent();
-				Mnemonic mnemonic = i.getMnemonic();
-				MnemonicParam[] mnemonicParams = mnemonic.getParams();
-				Integer[] instructionArgs = i.getArgs();
 
-				out.printf(i.getMnemonic().toString());
-				for (int idx = 0; idx < mnemonicParams.length; idx++) {
-					MnemonicParam paramType = mnemonicParams[idx];
-					Integer instructionArg = instructionArgs[idx];
-					printInstructionArg(paramType, instructionArg);
-				}
-				out.println();
+		ByteCode bc = bcp.parse(code);
+		for (Instruction i : bc.getInstructions()) {
+			printIndent();
+			Mnemonic mnemonic = i.getMnemonic();
+			MnemonicParam[] mnemonicParams = mnemonic.getParams();
+			Integer[] instructionArgs = i.getArgs();
+
+			out.printf(i.getMnemonic().toString());
+			for (int idx = 0; idx < mnemonicParams.length; idx++) {
+				MnemonicParam paramType = mnemonicParams[idx];
+				Integer instructionArg = instructionArgs[idx];
+				printInstructionArg(paramType, instructionArg);
 			}
-		} catch (Exception ioe) {
-			printfln("PARSER ERROR: %s", ioe.getLocalizedMessage());
-			return;
+			out.println();
 		}
 	}
 

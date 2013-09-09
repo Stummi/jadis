@@ -1,5 +1,6 @@
 package org.stummi.jadis.output.dump;
 
+import java.io.IOException;
 import java.io.PrintStream;
 import java.util.Date;
 import java.util.List;
@@ -24,7 +25,7 @@ public class SimpleDumper {
 
 	private AttributeDumperMap dumperMap;
 
-	public void dump() {
+	public void dump() throws IOException {
 		dumpHeader();
 		dumpConstantPool();
 		dumpClassDef();
@@ -90,7 +91,7 @@ public class SimpleDumper {
 		}
 	}
 
-	public void dumpFields() {
+	public void dumpFields() throws IOException {
 		printHead("FIELDS");
 		List<FieldInfo> fields = cf.getFields();
 		for (FieldInfo fi : fields) {
@@ -101,7 +102,7 @@ public class SimpleDumper {
 		}
 	}
 
-	public void dumpMethods() {
+	public void dumpMethods() throws IOException {
 		printHead("METHODS");
 		List<MethodInfo> methods = cf.getMethods();
 		for (MethodInfo mi : methods) {
@@ -113,22 +114,25 @@ public class SimpleDumper {
 		}
 	}
 
-	public void dumpAttributes() {
+	public void dumpAttributes() throws IOException {
 		printHead("ATTRIBUTES");
 		dumpAttributePool(cf.getAttributePool(), 0);
 	}
 
-	public void dumpAttributePool(AttributePool pool, int indent) {
+	public void dumpAttributePool(AttributePool pool, int indent)
+			throws IOException {
 		dumpAttributeList(pool.getAttributes(), indent);
 	}
 
-	public void dumpAttributeList(List<Attribute> attributes, int indent) {
+	public void dumpAttributeList(List<Attribute> attributes, int indent)
+			throws IOException {
 		for (Attribute a : attributes) {
 			dumpAttribute(a, indent);
 		}
 	}
 
-	public <T extends Attribute> void dumpAttribute(T a, int indent) {
+	public <T extends Attribute> void dumpAttribute(T a, int indent)
+			throws IOException {
 		for (int idx = 0; idx < indent; idx++) {
 			out.print("    ");
 		}

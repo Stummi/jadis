@@ -49,4 +49,15 @@ public class Test implements Serializable, TestInterface {
 		}
 		return ret;
 	}
+
+	public int somethingWithSwitch(TestEnum e, int a, int b) {
+		switch (e) {
+		case FOO:
+			return a + b;
+		case BAR:
+			return a * b;
+		default:
+			return 0;
+		}
+	}
 }
