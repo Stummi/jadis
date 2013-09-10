@@ -156,7 +156,7 @@ public class SimpleDumper {
 	}
 
 	private void printHead(String string) {
-		System.out.printf("========== %s ==========\n", string);
+		out.printf("========== %s ==========\n", string);
 	}
 
 }

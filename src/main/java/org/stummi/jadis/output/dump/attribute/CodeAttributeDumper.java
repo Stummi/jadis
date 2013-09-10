@@ -8,6 +8,8 @@ import org.stummi.jadis.code.Instruction;
 import org.stummi.jadis.code.Mnemonic;
 import org.stummi.jadis.code.MnemonicParam;
 import org.stummi.jadis.code.arg.InstructionArgument;
+import org.stummi.jadis.code.arg.LookupPair;
+import org.stummi.jadis.code.arg.LookupSwitchInstructionArgument;
 import org.stummi.jadis.code.arg.NumericInstructionArgument;
 import org.stummi.jadis.code.arg.TableSwitchInstructionArgument;
 import org.stummi.jadis.element.ConstantPool;
@@ -54,15 +56,17 @@ public class CodeAttributeDumper extends AbstractAttributeDumper<CodeAttribute> 
 			for (int idx = 0; idx < mnemonicParams.length; idx++) {
 				MnemonicParam paramType = mnemonicParams[idx];
 				InstructionArgument instructionArg = instructionArgs[idx];
-				printInstructionArg(paramType, instructionArg);
+				printInstructionArg(paramType, i, instructionArg);
 			}
 			out.println();
 		}
 	}
 
 	private void printInstructionArg(MnemonicParam paramType,
-			InstructionArgument arg) {
+			Instruction instruction, InstructionArgument arg) {
 		int i;
+		int instOffset = instruction.getBytePos();
+
 		switch (paramType) {
 		case NUL:
 		case PADDING:
@@ -70,21 +74,37 @@ public class CodeAttributeDumper extends AbstractAttributeDumper<CodeAttribute> 
 		case CONST_REF:
 			ConstantPool cp = classFile.getConstantPool();
 			i = ((NumericInstructionArgument) arg).getValue();
-			out.printf("(%d -> %s)", i,
-					cp.getConstant(i)
-					.toResolvedString(cp));
+			out.printf("(%d -> %s)", i, cp.getConstant(i).toResolvedString(cp));
 			break;
 		case TABLESWITCHDATA:
 			TableSwitchInstructionArgument tsia = (TableSwitchInstructionArgument) arg;
-			out.printf("%d %d %d", tsia.getDef(), tsia.getLow(),
-					tsia.getHigh());
-
 			indent += 2;
-			for (int o : tsia.getOffsets()) {
+			out.println();
+			printIndent();
+			out.printf("default: %d", tsia.getDefaultOffset() + instOffset);
+			int[] offsets = tsia.getOffsets();
+			int low = tsia.getLow();
+			for (int idx = 0; idx < tsia.getOffsets().length; idx++) {
 				out.println();
 				printIndent();
-				out.printf("%d", o);
+				out.printf("%d: %d", low + idx, offsets[idx] + instOffset);
 			}
+			indent -= 2;
+			break;
+		case LOOKUPSWITCHDATA:
+			LookupSwitchInstructionArgument lsia = (LookupSwitchInstructionArgument) arg;
+			indent += 2;
+			out.println();
+			printIndent();
+			out.printf("default: %d", lsia.getDefaultOffset() + instOffset);
+
+			LookupPair[] pairs = lsia.getLookupPairs();
+			for (LookupPair lp : pairs) {
+				out.println();
+				printIndent();
+				out.printf("%d: %d", lp.getMatch(), lp.getOffset() + instOffset);
+			}
+
 			indent -= 2;
 			break;
 		default:

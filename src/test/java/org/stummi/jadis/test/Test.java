@@ -54,11 +54,11 @@ public class Test implements Serializable, TestInterface {
 		return ret;
 	}
 
-	public int somethingWithSwitch(TestEnum e, int a, int b) {
+	public int somethingWithSwitch(int e, int a, int b) {
 		switch (e) {
-		case FOO:
+		case 8:
 			return a + b;
-		case BAR:
+		case 1:
 			return a * b;
 		default:
 			return 0;

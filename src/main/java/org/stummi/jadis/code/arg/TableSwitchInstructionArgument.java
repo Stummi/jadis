@@ -8,7 +8,7 @@ import lombok.Data;
 @Data
 public class TableSwitchInstructionArgument implements InstructionArgument {
 
-	private int def;
+	private int defaultOffset;
 	private int low;
 	private int high;
 	private int[] offsets;
@@ -16,7 +16,7 @@ public class TableSwitchInstructionArgument implements InstructionArgument {
 	@Override
 	public void readFromDataInputStream(int position, DataInputStream dis)
 			throws IOException {
-		def = dis.readInt();
+		defaultOffset = dis.readInt();
 		low = dis.readInt();
 		high = dis.readInt();
 

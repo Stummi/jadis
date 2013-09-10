@@ -5,6 +5,7 @@ import java.io.DataInputStream;
 import lombok.SneakyThrows;
 
 import org.stummi.jadis.code.arg.InstructionArgument;
+import org.stummi.jadis.code.arg.LookupSwitchInstructionArgument;
 import org.stummi.jadis.code.arg.NulInstructionArgument;
 import org.stummi.jadis.code.arg.PaddingInstructionArgument;
 import org.stummi.jadis.code.arg.S16InstructionArgument;
@@ -23,6 +24,7 @@ public enum MnemonicParam {
 	CONST_REF(U16InstructionArgument.class),
 	NUL(NulInstructionArgument.class),
 	TABLESWITCHDATA(TableSwitchInstructionArgument.class),
+	LOOKUPSWITCHDATA(LookupSwitchInstructionArgument.class),
 	PADDING(PaddingInstructionArgument.class);
 
 	private final Class<? extends InstructionArgument> argumenClass;

@@ -19,13 +19,12 @@ public class InnerClassesAttributeDumper extends
 			int innerClassInfoRef = e.getInnerClassInfoIndex();
 			int outerClassInfoRef = e.getOuterClassInfoIndex();
 			int innerClassNameRef = e.getInnerNameIndex();
-			Constant innerClassInfo = cp.getConstant(innerClassInfoRef);
-			Constant outerClassInfo = cp.getConstant(outerClassInfoRef);
 			Constant innerClassName = cp.getConstant(innerClassNameRef);
 			printfln("%s %s: %s in %s", flags,
-					innerClassName.toResolvedString(cp),
-					innerClassInfo.toResolvedString(cp),
-					outerClassInfo.toResolvedString(cp));
+					innerClassName == null ? "<NULL>" : innerClassName
+							.toResolvedString(cp),
+					cp.getClassConstantName(innerClassInfoRef),
+					cp.getClassConstantName(outerClassInfoRef));
 		}
 	}
 
