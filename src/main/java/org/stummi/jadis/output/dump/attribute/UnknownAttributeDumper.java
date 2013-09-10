@@ -9,13 +9,4 @@ public class UnknownAttributeDumper extends
 	public void dumpAttribute(UnknownAttribute attribute) {
 		printHexDump(attribute.getAttributeData());
 	}
-
-	public static void main(String[] args) {
-
-		for (int idx = 0; idx < 256; idx++) {
-			byte b = (byte) idx;
-			System.out.printf("%d %02X\n", b, b);
-		}
-	}
-
 }

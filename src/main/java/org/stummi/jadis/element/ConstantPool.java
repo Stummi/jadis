@@ -14,6 +14,15 @@ public class ConstantPool implements Element {
 		return constants[ref];
 	}
 
+	public String getConstantResolvedString(int ref) {
+		Constant c = constants[ref];
+		if (c == null) {
+			return String.format("[%d] <NULL>", ref);
+		} else {
+			return c.toResolvedString(this);
+		}
+	}
+
 	public String getStringConstantValue(int ref) {
 		return ((StringConstant) constants[ref]).getValue();
 	}

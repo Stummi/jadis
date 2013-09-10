@@ -23,7 +23,7 @@ public class SimpleDumper {
 	private final ClassFile cf;
 	private final PrintStream out;
 
-	private AttributeDumperMap dumperMap;
+	private AttributeDumperMap dumperMap = new AttributeDumperMap();
 
 	public void dump() throws IOException {
 		dumpHeader();
@@ -140,20 +140,11 @@ public class SimpleDumper {
 		out.print("Attribute: ");
 		String attributeName = getConstantPoolString(a.getNameRef());
 		out.println(attributeName);
-
-		if (dumperMap == null) {
-			initDumperMap();
-		}
-
 		AttributeDumper<T> dumper = dumperMap.getDumper(a.getClass());
 
-		dumper.dumpAttribute(a, cf, indent + 1, out);
+		dumper.dumpAttribute(a, cf, indent + 1, out, dumperMap);
 	}
 
-	private void initDumperMap() {
-		dumperMap = new AttributeDumperMap();
-
-	}
 
 	private void printHead(String string) {
 		out.printf("========== %s ==========\n", string);

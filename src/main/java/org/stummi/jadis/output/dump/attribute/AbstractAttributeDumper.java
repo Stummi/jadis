@@ -6,6 +6,7 @@ import java.io.PrintStream;
 import org.stummi.jadis.element.ClassFile;
 import org.stummi.jadis.element.attribute.Attribute;
 import org.stummi.jadis.output.dump.AttributeDumper;
+import org.stummi.jadis.output.dump.AttributeDumperMap;
 
 public abstract class AbstractAttributeDumper<T extends Attribute> implements
 		AttributeDumper<T> {
@@ -13,25 +14,38 @@ public abstract class AbstractAttributeDumper<T extends Attribute> implements
 	protected int indent;
 	protected PrintStream out;
 	protected ClassFile classFile;
+	protected AttributeDumperMap dumperMap;
 
 	@Override
 	public final synchronized void dumpAttribute(T attribute,
-			ClassFile classFile, int indent, PrintStream out)
+			ClassFile classFile, int indent, PrintStream out,
+			AttributeDumperMap dumperMap)
 			throws IOException {
 		this.classFile = classFile;
 		this.indent = indent;
 		this.out = out;
+		this.dumperMap = dumperMap;
 
 		try {
 			dumpAttribute(attribute);
 		} finally {
-			classFile = null;
-			indent = 0;
-			out = null;
+			this.classFile = null;
+			this.indent = 0;
+			this.out = null;
+			this.dumperMap = null;
 		}
 	}
 
 	protected abstract void dumpAttribute(T attribute) throws IOException;
+
+	protected void dumpSubAttribute(Attribute a) throws IOException {
+		String name = classFile.getConstantPool().getStringConstantValue(
+				a.getNameRef());
+		printfln("Attribute: %s", name);
+		dumperMap.getDumper(a.getClass()).dumpAttribute(a, classFile,
+				indent + 1,
+				out, dumperMap);
+	}
 
 	protected void println(String line) {
 		printIndent();

@@ -21,6 +21,7 @@ public enum MnemonicParam {
 	S8(S8InstructionArgument.class),
 	S16(S16InstructionArgument.class),
 	S32(S32InstructionArgument.class),
+	CONST_REF_U8(U8InstructionArgument.class),
 	CONST_REF(U16InstructionArgument.class),
 	NUL(NulInstructionArgument.class),
 	TABLESWITCHDATA(TableSwitchInstructionArgument.class),

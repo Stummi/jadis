@@ -165,7 +165,7 @@ public enum Mnemonic {
 	LCMP(0x94),
 	LCONST_0(0x09),
 	LCONST_1(0x0A),
-	LDC(0x12, U8),
+	LDC(0x12, CONST_REF_U8),
 	LDC_W(0x13, CONST_REF),
 	LDC2_W(0x14, CONST_REF),
 	LDIV(0x6d),

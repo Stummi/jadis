@@ -13,6 +13,7 @@ import org.stummi.jadis.code.arg.LookupSwitchInstructionArgument;
 import org.stummi.jadis.code.arg.NumericInstructionArgument;
 import org.stummi.jadis.code.arg.TableSwitchInstructionArgument;
 import org.stummi.jadis.element.ConstantPool;
+import org.stummi.jadis.element.attribute.Attribute;
 import org.stummi.jadis.element.attribute.CodeAttribute;
 import org.stummi.jadis.element.attribute.ExceptionEntry;
 
@@ -39,7 +40,9 @@ public class CodeAttributeDumper extends AbstractAttributeDumper<CodeAttribute> 
 					type, handlerPos);
 		}
 		indent--;
-
+		for (Attribute a : attribute.getAttributes()) {
+			dumpSubAttribute(a);
+		}
 	}
 
 	private void dumpCode(byte[] code) throws IOException {
@@ -72,6 +75,7 @@ public class CodeAttributeDumper extends AbstractAttributeDumper<CodeAttribute> 
 		case PADDING:
 			break;
 		case CONST_REF:
+		case CONST_REF_U8:
 			ConstantPool cp = classFile.getConstantPool();
 			i = ((NumericInstructionArgument) arg).getValue();
 			out.printf(" (%d -> %s)", i, cp.getConstant(i).toResolvedString(cp));

@@ -26,16 +26,26 @@ import org.stummi.jadis.reader.ElementReader;
 import org.stummi.jadis.reader.FieldInfoReader;
 import org.stummi.jadis.reader.LongConstantReader;
 import org.stummi.jadis.reader.MethodInfoReader;
+import org.stummi.jadis.reader.attribute.AnnotationDefaultAttributeReader;
 import org.stummi.jadis.reader.attribute.AnnotationElementReader;
 import org.stummi.jadis.reader.attribute.AnnotationElementValueReader;
 import org.stummi.jadis.reader.attribute.AnnotationsAttributeReader;
 import org.stummi.jadis.reader.attribute.AnnotationsEntryReader;
 import org.stummi.jadis.reader.attribute.CodeAttributeReader;
+import org.stummi.jadis.reader.attribute.EnclosingMethodReader;
 import org.stummi.jadis.reader.attribute.EnumConstantAnnotationValueReader;
 import org.stummi.jadis.reader.attribute.ExceptionEntryReader;
 import org.stummi.jadis.reader.attribute.ExceptionsAttributeReader;
 import org.stummi.jadis.reader.attribute.InnerClassEntryReader;
 import org.stummi.jadis.reader.attribute.InnerClassesAttributeReader;
+import org.stummi.jadis.reader.attribute.LineNumberTableAttributeReader;
+import org.stummi.jadis.reader.attribute.LineNumberTableEntryReader;
+import org.stummi.jadis.reader.attribute.LocalVariableTableEntryReader;
+import org.stummi.jadis.reader.attribute.LocalVariableTableReader;
+import org.stummi.jadis.reader.attribute.LocalVariableTypeTableEntryReader;
+import org.stummi.jadis.reader.attribute.LocalVariableTypeTableReader;
+import org.stummi.jadis.reader.attribute.MarkerAttributeReader;
+import org.stummi.jadis.reader.attribute.ParamAnnotationsAttributeReader;
 import org.stummi.jadis.reader.attribute.ReferenceAnnotationValueReader;
 import org.stummi.jadis.reader.attribute.SimpleReferenceAttributeReader;
 import org.stummi.jadis.reader.constant.ClassConstantReader;
@@ -93,6 +103,16 @@ public class JadisInputStream extends DataInputStream {
 		putReader(AnnotationElementValueReader.class);
 		putReader(ArrayAnnotationValueReader.class);
 		putReader(EnumConstantAnnotationValueReader.class);
+		putReader(LineNumberTableAttributeReader.class);
+		putReader(LineNumberTableEntryReader.class);
+		putReader(LocalVariableTableReader.class);
+		putReader(LocalVariableTableEntryReader.class);
+		putReader(LocalVariableTypeTableReader.class);
+		putReader(LocalVariableTypeTableEntryReader.class);
+		putReader(MarkerAttributeReader.class);
+		putReader(EnclosingMethodReader.class);
+		putReader(ParamAnnotationsAttributeReader.class);
+		putReader(AnnotationDefaultAttributeReader.class);
 	}
 
 	@SuppressWarnings("unchecked")

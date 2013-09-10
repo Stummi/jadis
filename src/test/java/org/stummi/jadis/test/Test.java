@@ -23,7 +23,8 @@ public class Test implements Serializable, TestInterface {
 	public String bar = "asdf";
 	public int bla = 42;
 
-	void test(int foo, String bar, int bla) throws IOException {
+	void test(int foo, @TestParamAnnotation("foo") String bar, int bla)
+			throws IOException {
 		if (foo > 100) {
 			throw new IOException("foo must be <= 100");
 		}

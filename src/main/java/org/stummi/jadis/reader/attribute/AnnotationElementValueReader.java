@@ -38,7 +38,7 @@ public class AnnotationElementValueReader implements
 			throws IOException {
 		char c = (char) jadis.readUnsignedByte();
 		if (!elementTypeMap.containsKey(c)) {
-			throw new IOException("unknown annotation value type: " + c);
+			throw new IOException("unknown annotation value type: " + (int) c);
 		}
 
 		return jadis.readElement(elementTypeMap.get(c));
