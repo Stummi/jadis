@@ -1,11 +1,6 @@
 package org.stummi.jadis.code;
 
-import static org.stummi.jadis.code.MnemonicParam.CONST_REF;
-import static org.stummi.jadis.code.MnemonicParam.NUL;
-import static org.stummi.jadis.code.MnemonicParam.S16;
-import static org.stummi.jadis.code.MnemonicParam.S32;
-import static org.stummi.jadis.code.MnemonicParam.S8;
-import static org.stummi.jadis.code.MnemonicParam.U8;
+import static org.stummi.jadis.code.MnemonicParam.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -181,7 +176,7 @@ public enum Mnemonic {
 	LLOAD_3(0x21),
 	LMUL(0x69),
 	LNEG(0x75),
-	// TODO LOOKUPSWITCH
+	LOOKUPSWITCH(0xAA, PADDING, TABLESWITCHDATA),
 	LOR(0x81),
 	LREM(0x71),
 	LRETURN(0xAD),

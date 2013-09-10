@@ -7,6 +7,9 @@ import org.stummi.jadis.code.ByteCodeParser;
 import org.stummi.jadis.code.Instruction;
 import org.stummi.jadis.code.Mnemonic;
 import org.stummi.jadis.code.MnemonicParam;
+import org.stummi.jadis.code.arg.InstructionArgument;
+import org.stummi.jadis.code.arg.NumericInstructionArgument;
+import org.stummi.jadis.code.arg.TableSwitchInstructionArgument;
 import org.stummi.jadis.element.ConstantPool;
 import org.stummi.jadis.element.attribute.CodeAttribute;
 import org.stummi.jadis.element.attribute.ExceptionEntry;
@@ -45,29 +48,52 @@ public class CodeAttributeDumper extends AbstractAttributeDumper<CodeAttribute> 
 			printIndent();
 			Mnemonic mnemonic = i.getMnemonic();
 			MnemonicParam[] mnemonicParams = mnemonic.getParams();
-			Integer[] instructionArgs = i.getArgs();
+			InstructionArgument[] instructionArgs = i.getArgs();
 
-			out.printf(i.getMnemonic().toString());
+			out.printf("%4d %s ", i.getBytePos(), i.getMnemonic().toString());
 			for (int idx = 0; idx < mnemonicParams.length; idx++) {
 				MnemonicParam paramType = mnemonicParams[idx];
-				Integer instructionArg = instructionArgs[idx];
+				InstructionArgument instructionArg = instructionArgs[idx];
 				printInstructionArg(paramType, instructionArg);
 			}
 			out.println();
 		}
 	}
 
-	private void printInstructionArg(MnemonicParam paramType, Integer arg) {
+	private void printInstructionArg(MnemonicParam paramType,
+			InstructionArgument arg) {
+		int i;
 		switch (paramType) {
 		case NUL:
+		case PADDING:
 			break;
 		case CONST_REF:
 			ConstantPool cp = classFile.getConstantPool();
-			out.printf(" (%d -> %s)", arg, cp.getConstant(arg)
+			i = ((NumericInstructionArgument) arg).getValue();
+			out.printf("(%d -> %s)", i,
+					cp.getConstant(i)
 					.toResolvedString(cp));
 			break;
+		case TABLESWITCHDATA:
+			TableSwitchInstructionArgument tsia = (TableSwitchInstructionArgument) arg;
+			out.printf("%d %d %d", tsia.getDef(), tsia.getLow(),
+					tsia.getHigh());
+
+			indent += 2;
+			for (int o : tsia.getOffsets()) {
+				out.println();
+				printIndent();
+				out.printf("%d", o);
+			}
+			indent -= 2;
+			break;
 		default:
-			out.printf(" %d", arg);
+			if (arg instanceof NumericInstructionArgument) {
+				i = ((NumericInstructionArgument) arg).getValue();
+				out.printf("%d", i);
+			} else {
+				out.printf("%s", arg);
+			}
 			break;
 		}
 	}

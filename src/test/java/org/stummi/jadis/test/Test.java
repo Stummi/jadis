@@ -42,6 +42,10 @@ public class Test implements Serializable, TestInterface {
 
 	}
 
+	public void t() {
+		int[] i = { 1, 2, 3, 4, 5 };
+	}
+
 	public int arraySum(int... values) {
 		int ret = 0;
 		for (int v : values) {
