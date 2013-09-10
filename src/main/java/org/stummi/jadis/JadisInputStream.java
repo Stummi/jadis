@@ -11,6 +11,7 @@ import java.util.Map;
 
 import lombok.SneakyThrows;
 
+import org.stummi.jadis.element.ClassFile;
 import org.stummi.jadis.element.ConstantPool;
 import org.stummi.jadis.element.Element;
 import org.stummi.jadis.element.accessflags.AccessFlag;
@@ -144,5 +145,9 @@ public class JadisInputStream extends DataInputStream {
 
 	public ConstantPool getConstantPool() {
 		return constantPool;
+	}
+
+	public ClassFile readClassFile() throws IOException {
+		return readElement(ClassFile.class);
 	}
 }

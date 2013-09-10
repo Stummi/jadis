@@ -4,9 +4,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import lombok.Data;
+
 import org.stummi.jadis.element.attribute.Attribute;
 import org.stummi.jadis.element.attribute.CodeAttribute;
 
+@Data
 public class AttributePool implements Element {
 	private ConstantPool constants;
 	private List<Attribute> attributes;
@@ -24,10 +27,6 @@ public class AttributePool implements Element {
 			String attName = constants.getStringConstantValue(a.getNameRef());
 			attributeMap.put(attName, a);
 		}
-	}
-
-	public List<Attribute> getAttributes() {
-		return attributes;
 	}
 
 	public CodeAttribute getCodeAttribute() {
