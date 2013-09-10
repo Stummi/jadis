@@ -52,7 +52,7 @@ public class CodeAttributeDumper extends AbstractAttributeDumper<CodeAttribute> 
 			MnemonicParam[] mnemonicParams = mnemonic.getParams();
 			InstructionArgument[] instructionArgs = i.getArgs();
 
-			out.printf("%4d %s ", i.getBytePos(), i.getMnemonic().toString());
+			out.printf("%4d %s", i.getBytePos(), i.getMnemonic().toString());
 			for (int idx = 0; idx < mnemonicParams.length; idx++) {
 				MnemonicParam paramType = mnemonicParams[idx];
 				InstructionArgument instructionArg = instructionArgs[idx];
@@ -74,14 +74,14 @@ public class CodeAttributeDumper extends AbstractAttributeDumper<CodeAttribute> 
 		case CONST_REF:
 			ConstantPool cp = classFile.getConstantPool();
 			i = ((NumericInstructionArgument) arg).getValue();
-			out.printf("(%d -> %s)", i, cp.getConstant(i).toResolvedString(cp));
+			out.printf(" (%d -> %s)", i, cp.getConstant(i).toResolvedString(cp));
 			break;
 		case TABLESWITCHDATA:
 			TableSwitchInstructionArgument tsia = (TableSwitchInstructionArgument) arg;
 			indent += 2;
 			out.println();
 			printIndent();
-			out.printf("default: %d", tsia.getDefaultOffset() + instOffset);
+			out.printf(" default: %d", tsia.getDefaultOffset() + instOffset);
 			int[] offsets = tsia.getOffsets();
 			int low = tsia.getLow();
 			for (int idx = 0; idx < tsia.getOffsets().length; idx++) {
@@ -96,13 +96,14 @@ public class CodeAttributeDumper extends AbstractAttributeDumper<CodeAttribute> 
 			indent += 2;
 			out.println();
 			printIndent();
-			out.printf("default: %d", lsia.getDefaultOffset() + instOffset);
+			out.printf(" default: %d", lsia.getDefaultOffset() + instOffset);
 
 			LookupPair[] pairs = lsia.getLookupPairs();
 			for (LookupPair lp : pairs) {
 				out.println();
 				printIndent();
-				out.printf("%d: %d", lp.getMatch(), lp.getOffset() + instOffset);
+				out.printf(" %d: %d", lp.getMatch(), lp.getOffset()
+						+ instOffset);
 			}
 
 			indent -= 2;
@@ -110,9 +111,9 @@ public class CodeAttributeDumper extends AbstractAttributeDumper<CodeAttribute> 
 		default:
 			if (arg instanceof NumericInstructionArgument) {
 				i = ((NumericInstructionArgument) arg).getValue();
-				out.printf("%d", i);
+				out.printf(" %d", i);
 			} else {
-				out.printf("%s", arg);
+				out.printf(" %s", arg);
 			}
 			break;
 		}

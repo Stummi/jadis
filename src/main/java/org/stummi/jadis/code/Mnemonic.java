@@ -205,39 +205,71 @@ public enum Mnemonic {
 	SALOAD(0x35),
 	SASTORE(0x56),
 	SIPUSH(0x11, S16),
+	SWAP(0x5F),
 	TABLESWITCH(0xAA, PADDING, TABLESWITCHDATA),
-	// TODO TABLESWITCH,
-	// TODO WIDE
+	
+	WIDE(0xC4, DONOTREAD),
+	WIDE_ILOAD(true, 0x15, U16),
+	WIDE_LLOAD(true, 0x16, U16),
+	WIDE_FLOAD(true, 0x17, U16),
+	WIDE_DLOAD(true, 0x18, U16),
+	WIDE_ALOAD(true, 0x19, U16),
+	WIDE_ISTORE(true, 0x36, U16),
+	WIDE_LSTORE(true, 0x37, U16),
+	WIDE_FSTORE(true, 0x38, U16),
+	WIDE_DSTORE(true, 0x39, U16),
+	WIDE_ASTORE(true, 0x3A, U16),
+	WIDE_RET(true, 0xa9, U16),
+	WIDE_IINC(true, 0x84, U16, S16)
 	;
 
 	private int opCode;
 	private MnemonicParam[] params;
+	private boolean wide;
 
 	private static final Map<Integer, Mnemonic> byOpCode;
+	private static final Map<Integer, Mnemonic> widesByOpCode;
 
 	static {
+		widesByOpCode = new HashMap<>();
 		byOpCode = new HashMap<>();
-		for (Mnemonic v : values()) {
-			Mnemonic cv = byOpCode.get(v.opCode);
-			if (cv != null) {
 
+		for (Mnemonic v : values()) {
+			Map<Integer, Mnemonic> useMap;
+			if (v.wide) {
+				useMap = widesByOpCode;
+			} else {
+				useMap = byOpCode;
+			}
+
+			Mnemonic cv = useMap.get(v.opCode);
+			if (cv != null) {
 				String errorMsg = String.format(
-						"Duplicate opcode: %02x (%s/%s)", v.opCode, cv, v);
+						"Duplicate %s opcode: %02x (%s/%s)", v.wide ? "wide"
+								: "", v.opCode, cv, v);
 				throw new RuntimeException(errorMsg);
 			}
-			byOpCode.put(v.opCode, v);
+			useMap.put(v.opCode, v);
 		}
 	}
 
 	private Mnemonic(int opCode, MnemonicParam... params) {
+		this(false, opCode, params);
+	}
+
+	private Mnemonic(boolean wide, int opCode, MnemonicParam... params) {
+		this.wide = wide;
 		this.opCode = opCode;
 		this.params = params;
 	}
 
-	public static Mnemonic forOpCode(int opCode) {
-		return byOpCode.get(opCode);
+	public static Mnemonic forOpCode(int opCode, boolean wide) {
+		if (wide) {
+			return widesByOpCode.get(opCode);
+		} else {
+			return byOpCode.get(opCode);
+		}
 	}
-
 	public MnemonicParam[] getParams() {
 		return params;
 	}

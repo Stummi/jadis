@@ -15,13 +15,22 @@ public class ByteCodeParser {
 		DataInputStream dais = new DataInputStream(bais);
 		int opCode;
 		List<Instruction> instructions = new ArrayList<>();
+		boolean wide = false;
 		while ((opCode = bais.read()) >= 0) {
 			int pos = bais.getPos() - 1;
-			Mnemonic mn = Mnemonic.forOpCode(opCode);
+			Mnemonic mn = Mnemonic.forOpCode(opCode, wide);
 			if (mn == null) {
-				throw new IOException(String.format("unknown opCode: 0x%02X",
-						opCode));
+				throw new IOException(
+						String.format("unknown %s opCode: 0x%02X",
+								wide ? "wide" : "", opCode));
 			}
+
+			if (mn == Mnemonic.WIDE) {
+				wide = true;
+				continue;
+			}
+			wide = false;
+
 			MnemonicParam[] mnparams = mn.getParams();
 			int paramCount = mnparams.length;
 			InstructionArgument[] params = new InstructionArgument[paramCount];

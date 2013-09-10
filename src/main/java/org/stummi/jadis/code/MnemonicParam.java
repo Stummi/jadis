@@ -25,7 +25,8 @@ public enum MnemonicParam {
 	NUL(NulInstructionArgument.class),
 	TABLESWITCHDATA(TableSwitchInstructionArgument.class),
 	LOOKUPSWITCHDATA(LookupSwitchInstructionArgument.class),
-	PADDING(PaddingInstructionArgument.class);
+	PADDING(PaddingInstructionArgument.class),
+	DONOTREAD(null);
 
 	private final Class<? extends InstructionArgument> argumenClass;
 
