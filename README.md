@@ -5,14 +5,15 @@ JaDis (Java Disassembler) is a simple tool to read and analyze the contents of j
 ## Features
 
 ### Current Features
-- Reading the outer structure of te class file
-- Dumping this Structure
+- Reading the outer structure of the class file
+- Dumping this structure
+- Attribute parsing (Some attributes are still TODO)
+- Bytecode parsing (Code attribute)
 
 ### TODO
-- Parse attributes
-- Parse the actual bytecode ("Code"-Attribute)
 - Print bytecode in a basic assembly language (jasmin?)
 - Print java source code
+- Write classfiles (to allow classfile manipulation)
 
 ## Contributing
 Contributors are welcome. To contribute you need an Java IDE with Maven and Lombok support.
